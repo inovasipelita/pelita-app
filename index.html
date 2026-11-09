@@ -1,0 +1,1441 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PELITA - Pemantauan & Evaluasi Perkembangan Anak (Pedoman SDIDTK Kemenkes RI 2022)</title>
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <!-- Google Font - Quicksand & Inter -->
+  <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+            display: ['Quicksand', 'sans-serif'],
+          },
+          colors: {
+            pelitaPurple: '#8B5CF6',
+            pelitaPurpleLight: '#EDE9FE',
+            pelitaYellow: '#FEF3C7',
+            pelitaYellowDark: '#F59E0B',
+            pelitaPink: '#FCE7F3',
+            pelitaPinkDark: '#EC4899',
+            pelitaMint: '#D1FAE5',
+            pelitaMintDark: '#10B981',
+            pelitaBlue: '#BAE6FD',
+            pelitaBlueDark: '#0284C7'
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: #F8FAFC;
+    }
+    h1, h2, h3, h4, .font-fun {
+      font-family: 'Quicksand', sans-serif;
+    }
+    .bg-pattern {
+      background-color: #f7f4ff;
+      background-image: radial-gradient(#c4b5fd 0.8px, transparent 0.8px), radial-gradient(#c4b5fd 0.8px, #f7f4ff 0.8px);
+      background-size: 32px 32px;
+      background-position: 0 0,16px 16px;
+    }
+    .floating-anim {
+      animation: float 4s ease-in-out infinite;
+    }
+    @keyframes float {
+      0% { transform: translateY(0px) rotate(0deg); }
+      50% { transform: translateY(-10px) rotate(2deg); }
+      100% { transform: translateY(0px) rotate(0deg); }
+    }
+    @media print {
+      .no-print { display: none !important; }
+      .print-only { display: block !important; }
+      body { background: white; }
+    }
+  </style>
+
+  <!-- JS GLOBAL NAVIGASI -->
+  <script>
+    function showPage(pageId) {
+      var pages = ['page-home', 'page-screening-form', 'page-result', 'page-history', 'page-guidance'];
+      for (var i = 0; i < pages.length; i++) {
+        var el = document.getElementById(pages[i]);
+        if (el) {
+          el.classList.add('hidden');
+        }
+      }
+      var target = document.getElementById('page-' + pageId);
+      if (target) {
+        target.classList.remove('hidden');
+      }
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+
+      if (pageId === 'history' && typeof renderHistoryList === 'function') {
+        renderHistoryList();
+      }
+    }
+
+    function toggleMobileMenu() {
+      var menu = document.getElementById('mobile-menu');
+      if (menu) menu.classList.toggle('hidden');
+    }
+  </script>
+</head>
+<body class="bg-pattern text-slate-800 min-h-screen flex flex-col">
+
+  <!-- HEADER NAVBAR -->
+  <header class="bg-white/90 backdrop-blur-md border-b-4 border-purple-300 sticky top-0 z-50 shadow-sm no-print">
+    <div class="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between">
+      <div class="flex items-center space-x-3 cursor-pointer" onclick="showPage('home')">
+        <div class="w-12 h-12 rounded-2xl bg-gradient-to-tr from-purple-500 to-pink-400 flex items-center justify-center text-white text-2xl font-bold shadow-md transform -rotate-3">
+          <i class="fa-solid fa-child-reaching"></i>
+        </div>
+        <div>
+          <h1 class="text-2xl font-black text-purple-700 tracking-wide font-fun flex items-center gap-2">
+            PELITA <span class="text-xs px-2 py-0.5 rounded-full bg-amber-100 text-amber-700 font-bold border border-amber-300">SDIDTK Kemenkes RI 2022</span>
+          </h1>
+          <p class="text-xs font-semibold text-slate-500">Pemantauan & Evaluasi Perkembangan Anak</p>
+        </div>
+      </div>
+
+      <nav class="hidden md:flex items-center space-x-2">
+        <button type="button" onclick="showPage('home')" class="px-4 py-2 rounded-xl text-sm font-bold text-slate-600 hover:bg-purple-50 hover:text-purple-600 transition flex items-center gap-2 cursor-pointer">
+          <i class="fa-solid fa-house text-purple-400"></i> Beranda
+        </button>
+        <button type="button" onclick="showPage('screening-form')" class="px-4 py-2 rounded-xl text-sm font-bold bg-purple-600 text-white shadow-md hover:bg-purple-700 transition flex items-center gap-2 cursor-pointer">
+          <i class="fa-solid fa-clipboard-check"></i> Skrining KPSP
+        </button>
+        <button type="button" onclick="showPage('history')" class="px-4 py-2 rounded-xl text-sm font-bold text-slate-600 hover:bg-purple-50 hover:text-purple-600 transition flex items-center gap-2 cursor-pointer">
+          <i class="fa-solid fa-clock-rotate-left text-pink-400"></i> Riwayat
+        </button>
+        <button type="button" onclick="showPage('guidance')" class="px-4 py-2 rounded-xl text-sm font-bold text-slate-600 hover:bg-purple-50 hover:text-purple-600 transition flex items-center gap-2 cursor-pointer">
+          <i class="fa-solid fa-book-open text-emerald-400"></i> Panduan
+        </button>
+      </nav>
+
+      <button type="button" onclick="toggleMobileMenu()" class="md:hidden p-2 rounded-xl bg-purple-50 text-purple-600 text-xl cursor-pointer">
+        <i class="fa-solid fa-bars"></i>
+      </button>
+    </div>
+
+    <!-- Mobile Navigation Drawer -->
+    <div id="mobile-menu" class="hidden md:hidden bg-white border-b border-slate-200 px-4 py-3 space-y-2">
+      <button type="button" onclick="showPage('home'); toggleMobileMenu()" class="w-full text-left px-4 py-2.5 rounded-xl font-bold text-slate-700 hover:bg-purple-50 cursor-pointer">
+        <i class="fa-solid fa-house text-purple-500 w-6"></i> Beranda
+      </button>
+      <button type="button" onclick="showPage('screening-form'); toggleMobileMenu()" class="w-full text-left px-4 py-2.5 rounded-xl font-bold text-purple-700 bg-purple-50 cursor-pointer">
+        <i class="fa-solid fa-clipboard-check text-purple-600 w-6"></i> Skrining Baru
+      </button>
+      <button type="button" onclick="showPage('history'); toggleMobileMenu()" class="w-full text-left px-4 py-2.5 rounded-xl font-bold text-slate-700 hover:bg-purple-50 cursor-pointer">
+        <i class="fa-solid fa-clock-rotate-left text-pink-500 w-6"></i> Riwayat Skrining
+      </button>
+      <button type="button" onclick="showPage('guidance'); toggleMobileMenu()" class="w-full text-left px-4 py-2.5 rounded-xl font-bold text-slate-700 hover:bg-purple-50 cursor-pointer">
+        <i class="fa-solid fa-book-open text-emerald-500 w-6"></i> Panduan & Pedoman
+      </button>
+    </div>
+  </header>
+
+  <!-- MAIN CONTAINER CONTENT -->
+  <main class="max-w-5xl mx-auto px-4 py-6 flex-grow w-full">
+
+    <!-- PAGE 1: HOME PAGE -->
+    <section id="page-home" class="space-y-8">
+      <div class="bg-gradient-to-r from-purple-600 via-pink-500 to-amber-400 rounded-3xl p-6 md:p-10 text-white shadow-xl relative overflow-hidden">
+        <div class="absolute -right-6 -bottom-6 opacity-20 text-white text-9xl pointer-events-none floating-anim z-0">
+          <i class="fa-solid fa-shapes"></i>
+        </div>
+        <div class="max-w-2xl relative z-10 space-y-4">
+          <span class="inline-block bg-white/20 backdrop-blur-md text-white font-bold text-xs px-3.5 py-1.5 rounded-full border border-white/30">
+            <i class="fa-solid fa-heart text-pink-300 mr-1"></i> "Anak Sehat, Indonesia Hebat"
+          </span>
+          <h2 class="text-3xl md:text-5xl font-black font-fun leading-tight">
+            Pantau Tumbuh Kembang Si Kecil Sejak Dini!
+          </h2>
+          <p class="text-purple-100 text-sm md:text-base leading-relaxed">
+            Setiap detik masa tumbuh kembang anak sangat berharga. Mari dampingi langkah emas si kecil dengan deteksi dan stimulasi dini sesuai standar resmi Kemenkes RI.
+          </p>
+          <div class="pt-2 flex flex-wrap gap-3 relative z-20">
+            <button type="button" onclick="showPage('screening-form')" class="px-6 py-3.5 rounded-2xl bg-amber-400 hover:bg-amber-300 text-amber-950 font-black font-fun shadow-lg hover:shadow-xl transition transform hover:-translate-y-0.5 flex items-center gap-2 cursor-pointer z-30">
+              <i class="fa-solid fa-play text-lg"></i> Mulai Skrining Sekarang
+            </button>
+            <button type="button" onclick="showPage('guidance')" class="px-5 py-3.5 rounded-2xl bg-white/20 hover:bg-white/30 text-white font-bold backdrop-blur-sm transition flex items-center gap-2 cursor-pointer z-30">
+              <i class="fa-solid fa-circle-info"></i> Pelajari Pedoman
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div class="bg-white p-6 rounded-3xl border-2 border-purple-100 shadow-sm hover:shadow-md transition space-y-3">
+          <div class="w-12 h-12 rounded-2xl bg-purple-100 text-purple-600 flex items-center justify-center text-xl font-bold">
+            <i class="fa-solid fa-brain"></i>
+          </div>
+          <h3 class="text-lg font-bold font-fun text-slate-800">Deteksi Dini Cegah Keterlambatan</h3>
+          <p class="text-sm text-slate-600 leading-relaxed">
+            Masa emas 0–6 tahun adalah periode krusial pembentukan otak. Deteksi dini membantu mengenali potensi hambatan perkembangan lebih cepat sebelum menjadi permanen.
+          </p>
+        </div>
+
+        <div class="bg-white p-6 rounded-3xl border-2 border-pink-100 shadow-sm hover:shadow-md transition space-y-3">
+          <div class="w-12 h-12 rounded-2xl bg-pink-100 text-pink-600 flex items-center justify-center text-xl font-bold">
+            <i class="fa-solid fa-hands-holding-child"></i>
+          </div>
+          <h3 class="text-lg font-bold font-fun text-slate-800">Stimulasi Lewat Bermain</h3>
+          <p class="text-sm text-slate-600 leading-relaxed">
+            Bermain adalah cara belajar terbaik bagi si kecil. Berikan kasih sayang, ajak bicara, dan latih sensorik serta motorik anak setiap hari dengan suasana gembira.
+          </p>
+        </div>
+
+        <div class="bg-white p-6 rounded-3xl border-2 border-emerald-100 shadow-sm hover:shadow-md transition space-y-3">
+          <div class="w-12 h-12 rounded-2xl bg-emerald-100 text-emerald-600 flex items-center justify-center text-xl font-bold">
+            <i class="fa-solid fa-person-running"></i>
+          </div>
+          <h3 class="text-lg font-bold font-fun text-slate-800">Pantau 4 Sektor Perkembangan</h3>
+          <p class="text-sm text-slate-600 leading-relaxed">
+            Pastikan kemampuan Gerak Kasar, Gerak Halus, Bicara/Bahasa, dan Sosialisasi/Kemandirian si kecil berkembang seimbang sesuai dengan tahap usianya.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- PAGE 2: FORM INPUT DATA ANAK & KPSP QUESTIONNAIRE -->
+    <section id="page-screening-form" class="hidden space-y-6">
+      
+      <!-- STEP 1: IDENTITAS ANAK FORM -->
+      <div id="step-identity" class="bg-white rounded-3xl p-6 md:p-8 border-2 border-purple-200 shadow-md space-y-6">
+        <div class="flex items-center justify-between border-b border-slate-100 pb-4">
+          <div class="flex items-center space-x-3">
+            <div class="w-10 h-10 rounded-2xl bg-purple-600 text-white flex items-center justify-center font-bold">1</div>
+            <div>
+              <h2 class="text-xl font-bold font-fun text-purple-900">Data Identitas Anak & Perhitungan Usia</h2>
+              <p class="text-xs text-slate-500">Isi data untuk menentukan usia pemeriksaan dan form KPSP otomatis berdasarkan Pedoman SDIDTK</p>
+            </div>
+          </div>
+          <button type="button" onclick="showPage('home')" class="px-3.5 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold transition flex items-center gap-1.5 no-print cursor-pointer">
+            <i class="fa-solid fa-arrow-left"></i> Kembali Ke Beranda
+          </button>
+        </div>
+
+        <form id="childForm" onsubmit="calculateAgeAndStart(event);" class="space-y-5">
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+            
+            <!-- Nama Anak -->
+            <div>
+              <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">Nama Lengkap Anak <span class="text-pink-500">*</span></label>
+              <input type="text" id="namaAnak" required oninput="this.value = this.value.toUpperCase().replace(/[^A-Z\s]/g, '')" placeholder="CONTOH: PRABU AIRLANGGA" class="w-full px-4 py-3 rounded-2xl border-2 border-slate-200 focus:border-purple-500 focus:outline-none font-bold uppercase text-slate-800 text-sm">
+              <span class="text-[11px] text-slate-400 mt-1 block">*Otomatis konversi huruf kapital</span>
+            </div>
+
+            <!-- Jenis Kelamin -->
+            <div>
+              <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">Jenis Kelamin *</label>
+              <select id="jenisKelamin" required class="w-full px-4 py-3 rounded-2xl border-2 border-slate-200 focus:border-purple-500 focus:outline-none font-bold text-slate-800 text-sm">
+                <option value="">-- Pilih Jenis Kelamin --</option>
+                <option value="Laki-laki">Laki-laki</option>
+                <option value="Perempuan">Perempuan</option>
+              </select>
+            </div>
+
+            <!-- Tanggal Lahir -->
+            <div>
+              <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">Tanggal Lahir Anak *</label>
+              <input type="date" id="tglLahir" required onchange="updateAgePreview()" class="w-full px-4 py-3 rounded-2xl border-2 border-slate-200 focus:border-purple-500 focus:outline-none font-bold text-slate-800 text-sm">
+            </div>
+
+            <!-- Tanggal Pemeriksaan (READ ONLY - OTOMATIS TANGGAL HARI INI) -->
+            <div>
+              <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">Tanggal Pemeriksaan (Otomatis Hari Ini)</label>
+              <input type="date" id="tglPemeriksaan" readonly class="w-full px-4 py-3 rounded-2xl border-2 border-purple-200 bg-purple-50/50 focus:outline-none font-bold text-purple-900 text-sm cursor-not-allowed">
+            </div>
+
+            <!-- Usia Anak (Muncul Otomatis Saat Tanggal Lahir Diisi) -->
+            <div>
+              <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">Usia Anak (Bulan & Hari)</label>
+              <input type="text" id="usiaTampil" readonly placeholder="Otomatis dihitung dari tanggal" class="w-full px-4 py-3 rounded-2xl border-2 border-purple-200 bg-purple-50/50 focus:outline-none font-bold text-purple-900 text-sm">
+            </div>
+
+            <!-- Nama Orang Tua -->
+            <div>
+              <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">Nama Orang Tua / Pengasuh <span class="text-pink-500">*</span></label>
+              <input type="text" id="namaOrangTua" required oninput="this.value = this.value.toUpperCase().replace(/[^A-Z\s]/g, '')" placeholder="CONTOH: SRIKANDI" class="w-full px-4 py-3 rounded-2xl border-2 border-slate-200 focus:border-purple-500 focus:outline-none font-bold uppercase text-slate-800 text-sm">
+            </div>
+
+            <!-- Hubungan -->
+            <div class="md:col-span-2">
+              <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">Hubungan dengan Anak *</label>
+              <select id="hubungan" required class="w-full px-4 py-3 rounded-2xl border-2 border-slate-200 focus:border-purple-500 focus:outline-none font-bold text-slate-800 text-sm">
+                <option value="Ibu Kandung">Ibu Kandung</option>
+                <option value="Ayah Kandung">Ayah Kandung</option>
+                <option value="Nenek / Kakek">Nenek / Kakek</option>
+                <option value="Pengasuh">Pengasuh</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- OPSI PREMATURITAS (OTOMATIS HILANG JIKA USIA ANAK >= 2 TAHUN / 24 BULAN) -->
+          <div id="premature-box" class="p-4 rounded-2xl bg-amber-50 border-2 border-amber-200 space-y-3">
+            <div class="flex flex-wrap items-center justify-between gap-2">
+              <label class="flex items-center space-x-3 cursor-pointer">
+                <input type="checkbox" id="isPremature" onchange="togglePrematureInput()" class="w-5 h-5 text-purple-600 rounded border-slate-300 focus:ring-purple-500">
+                <span class="text-sm font-bold text-amber-900">Anak lahir Prematur (Usia Kehamilan &lt; 37 minggu)?</span>
+              </label>
+              <span class="text-xs bg-amber-200 text-amber-800 font-bold px-2.5 py-0.5 rounded-full">Koreksi Khusus Kronologis &lt; 2 Tahun</span>
+            </div>
+
+            <div id="premature-weeks-container" class="hidden pt-2 border-t border-amber-200">
+              <label class="block text-xs font-bold text-amber-900 mb-1">Usia Kehamilan saat Lahir (Minggu):</label>
+              <input type="number" id="usiaKehamilan" min="20" max="36" value="34" onchange="updateAgePreview()" class="w-32 px-3 py-2 rounded-xl border-2 border-amber-300 font-bold text-amber-950 focus:outline-none">
+              <span class="text-xs text-amber-700 ml-2">(Rumus SDIDTK: Usia Koreksi = Usia Kronologis - (40 minggu - Usia Kehamilan saat lahir))</span>
+            </div>
+          </div>
+
+          <!-- LIVE AGE PREVIEW BOX -->
+          <div id="live-age-preview" class="hidden p-4 rounded-2xl bg-purple-50 border-2 border-purple-200 space-y-2 mt-4">
+            <div class="flex items-center space-x-2 text-purple-900 font-bold text-xs uppercase tracking-wider">
+              <i class="fa-solid fa-calculator text-purple-600"></i>
+              <span>Preview Deteksi Form KPSP:</span>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-3 text-xs">
+              <div class="bg-white p-3 rounded-xl border border-purple-100 shadow-sm">
+                <span class="text-slate-500 block text-[11px]">Usia Kronologis:</span>
+                <span id="preview-kronologis" class="font-bold text-purple-900 text-sm">-</span>
+              </div>
+              <div class="bg-white p-3 rounded-xl border border-purple-100 shadow-sm">
+                <span class="text-slate-500 block text-[11px]">Status Prematuritas:</span>
+                <span id="preview-koreksi" class="font-bold text-amber-700 text-sm">Tidak Dicentang</span>
+              </div>
+              <div class="bg-white p-3 rounded-xl border border-purple-100 shadow-sm">
+                <span class="text-slate-500 block text-[11px]">Form KPSP Terpilih:</span>
+                <span id="preview-kpsp-form" class="font-bold text-emerald-700 text-sm">-</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="flex justify-end pt-2">
+            <button type="submit" class="w-full md:w-auto px-8 py-3.5 bg-purple-600 hover:bg-purple-700 text-white font-bold font-fun rounded-2xl shadow-lg transition flex items-center justify-center gap-2 cursor-pointer">
+              Hitung Usia & Lanjut ke Soal KPSP <i class="fa-solid fa-arrow-right"></i>
+            </button>
+          </div>
+        </form>
+      </div>
+
+      <!-- STEP 2: KPSP QUESTIONNAIRE CONTAINER -->
+      <div id="step-kpsp" class="hidden space-y-6">
+        <div class="bg-gradient-to-r from-purple-700 to-indigo-600 text-white rounded-3xl p-6 shadow-md flex flex-wrap items-center justify-between gap-4">
+          <div>
+            <span id="kpsp-age-badge" class="px-3 py-1 bg-amber-400 text-amber-950 font-black text-xs uppercase tracking-wider rounded-full font-fun">
+              KPSP KELOMPOK USIA 3 BULAN
+            </span>
+            <h3 id="kpsp-child-name" class="text-2xl font-bold font-fun mt-2">NAMA ANAK</h3>
+            <div id="kpsp-calc-details" class="text-xs text-purple-100 mt-2 space-y-0.5 font-medium"></div>
+          </div>
+          <button type="button" onclick="backToIdentity()" class="px-4 py-2.5 bg-white/20 hover:bg-white/30 text-white text-xs font-bold rounded-xl transition flex items-center gap-2 cursor-pointer">
+            <i class="fa-solid fa-pen-to-square"></i> Edit Data Identitas
+          </button>
+        </div>
+
+        <div id="kpsp-tools-box" class="bg-amber-50 border-2 border-amber-200 rounded-3xl p-5 shadow-sm space-y-2">
+          <div class="flex items-center space-x-2 text-amber-900 font-bold font-fun text-sm">
+            <i class="fa-solid fa-toolbox text-amber-600 text-base"></i>
+            <span>Alat & Bahan Instrumen Skrining yang Dibutuhkan (KPSP <span id="tools-age-title">3</span> Bulan):</span>
+          </div>
+          <ul id="kpsp-tools-list" class="grid grid-cols-1 md:grid-cols-2 gap-2 text-xs text-amber-950 pt-1 font-medium">
+          </ul>
+        </div>
+
+        <div id="kpsp-questions-list" class="space-y-6"></div>
+
+        <div class="bg-white p-6 rounded-3xl border-2 border-purple-200 shadow-md flex flex-wrap justify-between items-center gap-4">
+          <button type="button" onclick="backToIdentity()" class="px-5 py-3 bg-slate-200 hover:bg-slate-300 text-slate-700 font-bold text-xs rounded-2xl transition flex items-center gap-2 cursor-pointer">
+            <i class="fa-solid fa-arrow-left"></i> Kembali ke Identitas
+          </button>
+          <button type="button" onclick="evaluateKPSP()" class="px-8 py-3.5 bg-emerald-500 hover:bg-emerald-600 text-white font-black font-fun rounded-2xl shadow-lg transition flex items-center gap-2 cursor-pointer">
+            <i class="fa-solid fa-square-check text-lg"></i> Proses Hasil Skrining
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- PAGE 3: RESULT & REPORT PAGE -->
+    <section id="page-result" class="hidden space-y-6">
+      <div id="printable-area" class="bg-white rounded-3xl p-6 md:p-10 border-2 border-slate-200 shadow-xl space-y-6">
+        <div class="border-b-2 border-slate-200 pb-6 flex flex-wrap items-center justify-between gap-4">
+          <div class="flex items-center space-x-3">
+            <div class="w-12 h-12 rounded-2xl bg-purple-600 text-white flex items-center justify-center text-2xl font-bold">
+              <i class="fa-solid fa-notes-medical"></i>
+            </div>
+            <div>
+              <h2 class="text-2xl font-black font-fun text-purple-950">HASIL SKRINING KPSP</h2>
+              <p class="text-xs text-slate-500">Berdasarkan Pedoman Pelaksanaan SDIDTK Kemenkes RI 2022</p>
+            </div>
+          </div>
+          <div class="text-right text-xs text-slate-500">
+            <p>Tanggal Skrining: <span id="res-tgl-pemeriksaan" class="font-bold text-slate-800"></span></p>
+            <p>ID Skrining: <span id="res-id" class="font-mono text-purple-700"></span></p>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div class="bg-slate-50 p-5 rounded-2xl border border-slate-200 space-y-3 md:col-span-2">
+            <h4 class="text-xs font-bold text-purple-900 uppercase tracking-wider border-b border-slate-200 pb-1.5">
+              Data Identitas Anak & Hasil Perhitungan Usia
+            </h4>
+            <div class="grid grid-cols-2 gap-x-4 gap-y-2 text-xs">
+              <div><span class="text-slate-500">Nama Lengkap Anak:</span> <p id="res-nama-anak" class="font-bold text-slate-900 uppercase text-sm"></p></div>
+              <div><span class="text-slate-500">Jenis Kelamin:</span> <p id="res-jk" class="font-bold text-slate-900"></p></div>
+              <div><span class="text-slate-500">Tanggal Lahir:</span> <p id="res-tgl-lahir" class="font-bold text-slate-900"></p></div>
+              <div><span class="text-slate-500">Orang Tua / Pengasuh:</span> <p id="res-orang-tua" class="font-bold text-slate-900 uppercase"></p></div>
+              <div><span class="text-slate-500">Usia Kronologis (Saat Periksa):</span> <p id="res-usia-kronologis" class="font-bold text-slate-900"></p></div>
+              <div><span class="text-slate-500">Usia Koreksi Prematur:</span> <p id="res-usia-koreksi" class="font-bold text-purple-700"></p></div>
+              <div><span class="text-slate-500">Usia Digunakan (Setelah Pembulatan):</span> <p id="res-usia-digunakan" class="font-bold text-indigo-900"></p></div>
+              <div><span class="text-slate-500">Form KPSP Kelompok Usia:</span> <p id="res-kelompok-kpsp" class="font-bold text-amber-700"></p></div>
+            </div>
+          </div>
+
+          <div id="res-score-card" class="p-5 rounded-2xl border-2 flex flex-col justify-center items-center text-center space-y-2">
+            <span class="text-xs font-bold uppercase tracking-wider">Hasil Evaluasi KPSP</span>
+            <div id="res-total-skor" class="text-5xl font-black font-fun">0 / 10</div>
+            <div id="res-kategori" class="text-base font-black font-fun px-4 py-1 rounded-full uppercase"></div>
+          </div>
+        </div>
+
+        <div id="res-intervention-box" class="space-y-4"></div>
+        <div id="res-stimulasi-box" class="space-y-3"></div>
+
+        <div class="space-y-3 pt-2">
+          <h4 class="text-sm font-bold text-slate-800 font-fun">Rincian Jawaban Pertanyaan KPSP:</h4>
+          <div id="res-questions-breakdown" class="space-y-2"></div>
+        </div>
+
+        <div class="p-4 rounded-2xl bg-slate-100 text-[11px] text-slate-500 leading-relaxed border border-slate-200">
+          <strong>Sumber adaptasi:</strong> Kementerian Kesehatan RI, Pedoman Pelaksanaan Stimulasi, Deteksi, dan Intervensi Dini Tumbuh Kembang Anak di Tingkat Pelayanan Kesehatan Dasar (2022). Profesi Bidan UNAIR PBI2G 2026 X Puskesmas Keputih Surabaya
+        </div>
+      </div>
+
+      <div class="flex flex-wrap gap-4 justify-between items-center no-print">
+        <button type="button" onclick="backToIdentity()" class="px-6 py-3 bg-slate-200 hover:bg-slate-300 text-slate-800 font-bold rounded-2xl transition flex items-center gap-2 cursor-pointer">
+          <i class="fa-solid fa-rotate-left"></i> Skrining Ulang / Kembalikan Data
+        </button>
+        <div class="flex gap-3">
+          <button type="button" onclick="sendToGoogleSheets()" id="btn-save-cloud" class="px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-2xl shadow transition flex items-center gap-2 cursor-pointer">
+            <i class="fa-solid fa-cloud-arrow-up"></i> Simpan Online (Spreadsheet)
+          </button>
+          <button type="button" onclick="printReport()" class="px-6 py-3 bg-purple-600 hover:bg-purple-700 text-white font-bold rounded-2xl shadow transition flex items-center gap-2 cursor-pointer">
+            <i class="fa-solid fa-print"></i> Cetak / Simpan PDF
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- PAGE 4: HISTORY PAGE -->
+    <section id="page-history" class="hidden space-y-6">
+      <div class="bg-white rounded-3xl p-6 md:p-8 border-2 border-purple-100 shadow-md space-y-6">
+        <div class="flex items-center justify-between border-b border-slate-100 pb-4">
+          <div class="flex items-center space-x-3">
+            <div class="w-10 h-10 rounded-2xl bg-pink-500 text-white flex items-center justify-center font-bold">
+              <i class="fa-solid fa-clock-rotate-left"></i>
+            </div>
+            <div>
+              <h2 class="text-xl font-bold font-fun text-purple-900">Riwayat Skrining Perkembangan</h2>
+              <p class="text-xs text-slate-500">Tersimpan secara lokal pada perangkat Anda</p>
+            </div>
+          </div>
+          <button type="button" onclick="clearLocalHistory()" class="text-xs text-red-500 hover:text-red-700 font-bold px-3 py-1.5 rounded-lg border border-red-200 cursor-pointer">
+            <i class="fa-solid fa-trash-can"></i> Hapus Riwayat
+          </button>
+        </div>
+
+        <div id="history-list" class="space-y-4"></div>
+      </div>
+    </section>
+
+    <!-- PAGE 5: GUIDANCE & INFO -->
+    <section id="page-guidance" class="hidden space-y-6">
+      <div class="bg-white rounded-3xl p-6 md:p-8 border-2 border-purple-100 shadow-md space-y-6">
+        <div class="border-b border-slate-100 pb-4">
+          <h2 class="text-2xl font-bold font-fun text-purple-900">Pedoman Pelaksanaan SDIDTK Kemenkes RI 2022</h2>
+          <p class="text-xs text-slate-500">Kementerian Kesehatan Republik Indonesia</p>
+        </div>
+
+        <div class="space-y-4 text-sm text-slate-700 leading-relaxed">
+          <div class="p-4 rounded-2xl bg-purple-50 border border-purple-200">
+            <h3 class="font-bold text-purple-900 font-fun text-base mb-1">Aturan Perhitungan Umur & Koreksi Prematuritas</h3>
+            <p>1. Umur dihitung dari tanggal lahir hingga tanggal pemeriksaan (Tahun, Bulan, Hari).</p>
+            <p>2. <strong>Aturan Pembulatan Hari SDIDTK:</strong> Apabila sisa hari 0–15 hari, dibulatkan tetap (diabaikan). Jika sisa hari &gt; 15 hari, dibulatkan menjadi 1 bulan ke atas (ditambahkan 1 bulan).</p>
+            <p>3. <strong>Penyesuaian Prematuritas:</strong> Untuk anak usia &lt; 2 tahun (24 bulan) yang lahir prematur (&lt; 37 minggu), dilakukan koreksi usia dengan acuan 40 minggu: <code>Usia Koreksi = Usia Kronologis - (40 minggu - usia kehamilan saat lahir)</code>.</p>
+            <p>4. <strong>Penentuan Form KPSP:</strong> Pilih formulir KPSP kelompok usia yang sesuai. Jika usia anak tidak tepat sesuai kelompok formulir KPSP, gunakan kelompok usia KPSP yang lebih muda terdekat.</p>
+          </div>
+
+          <div class="p-4 rounded-2xl bg-amber-50 border border-amber-200">
+            <h3 class="font-bold text-amber-900 font-fun text-base mb-1">Kategori Interpretasi Skor KPSP</h3>
+            <ul class="list-disc list-inside space-y-1">
+              <li><strong>Skor 9 atau 10 (Sesuai - S):</strong> Perkembangan anak sesuai dengan tahap perkembangannya. Lanjutkan stimulasi rutin.</li>
+              <li><strong>Skor 7 atau 8 (Meragukan - M):</strong> Perkembangan anak meragukan. Lakukan stimulasi intensif di rumah selama 2 minggu, lalu evaluasi ulang.</li>
+              <li><strong>Skor ≤ 6 (Kemungkinan Penyimpangan - P):</strong> Ada kemungkinan penyimpangan perkembangan. Segera rujuk ke Rumah Sakit / Faskes Rujukan Tumbuh Kembang Level 1.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="bg-white border-t border-purple-100 py-6 mt-12 no-print">
+    <div class="max-w-6xl mx-auto px-4 text-center space-y-2">
+      <p class="text-xs font-bold text-purple-800 font-fun">PELITA • Pemantauan dan Evaluasi Perkembangan Anak Berdasarkan Pedoman SDIDTK Kemenkes RI 2022</p>
+      <p class="text-[11px] text-slate-400">Profesi Bidan UNAIR PBI2G 2026 X Puskesmas Keputih Surabaya</p>
+    </div>
+  </footer>
+
+  <!-- JAVASCRIPT LOGIC & KPSP DATABASE -->
+  <script>
+    let currentChildData = {};
+    let currentQuestions = [];
+    let currentAnswers = {};
+
+    // DATABASE ALAT & BAHAN INSTRUMEN
+    const kpspToolsDatabase = {
+      3: ["Gulungan wool merah", "Matras / alas datar untuk tengkurap"],
+      6: ["Gulungan wool merah", "Pensil", "Kismis / kacang / uang logam", "Mainan yang menarik"],
+      9: ["Kismis, kacang, atau potongan biskuit", "2 buah kubus kayu", "Gulungan wool merah", "Mainan menarik"],
+      12: ["Pensil", "Kismis, kacang, atau potongan biskuit", "2 buah kubus kayu"],
+      15: ["2 buah kubus kayu", "Cangkir / gelas kecil", "Alas/lantai untuk membungkuk"],
+      18: ["Pensil dan kertas", "Bola tenis", "Cangkir / gelas"],
+      21: ["Pensil dan kertas", "2 buah kubus kayu", "Gambar binatang (Kucing, Anjing, Kuda, Cangkir)"],
+      24: ["Pensil dan kertas", "4 buah kubus kayu", "Bola tenis", "Tangga / tangga kecil"],
+      30: ["4 buah kubus kayu", "Pensil dan kertas", "Gambar binatang (Kucing, Anjing, Kuda, Cangkir)", "Bola tenis"],
+      36: ["6 buah kubus kayu", "Pensil dan kertas", "Gambar binatang (Kucing, Anjing, Kuda, Cangkir)", "Bola tenis", "Selembar kertas"],
+      42: ["8 buah kubus kayu", "Pensil dan kertas", "Gambar binatang & aksi", "Selembar kertas"],
+      48: ["5 buah kubus kayu", "Pensil dan kertas", "Gambar binatang & aksi", "Selembar kertas"],
+      54: ["Pensil dan kertas", "Peraga 2 garis lurus beda panjang", "Peraga tanda tambah (+)"],
+      60: ["Pensil dan kertas", "Peraga 2 garis lurus beda panjang"],
+      66: ["Pensil dan kertas", "8 buah kubus kayu", "Bola tenis"],
+      72: ["Pensil dan kertas", "Bola tenis", "Garis lurus untuk berjalan tumit-ke-jari"]
+    };
+
+    const kpspDatabase = {
+      3: [
+        { id: 1, sector: "Gerak kasar", text: "Pada saat bayi terlentang, apakah masing-masing lengan dan tungkai bergerak dengan mudah? Jawab 'Tidak' bila salah satu atau kedua tungkai atau lengan bayi bergerak tak terarah atau tak terkendali." },
+        { id: 2, sector: "Sosialisasi dan kemandirian", text: "Jangan membuat suara apapun. Pada saat bayi terlentang apakah ia melihat dan menatap wajah Anda?" },
+        { id: 3, sector: "Sosialisasi dan kemandirian", text: "Pada saat Anda mengajak bayi berbicara dan tersenyum, apakah ia tersenyum kembali kepada Anda?" },
+        { id: 4, sector: "Bicara dan bahasa", text: "Apakah bayi dapat mengeluarkan suara-suara lain (mengoceh) selain menangis?" },
+        { id: 5, sector: "Bicara dan bahasa", text: "Apakah bayi suka tertawa keras walau tidak digelitik atau diraba-raba?" },
+        { id: 6, sector: "Gerak halus", text: "Ambil gulungan wool merah, lalu letakkan di atas wajah di depan mata bayi. Gerakkan wool dari samping kiri ke kanan kepala atau sebaliknya. Apakah ia dapat mengikuti gerakan Anda dengan menggerakkan kepalanya dari kanan atau kiri ke tengah?" },
+        { id: 7, sector: "Gerak halus", text: "Ambil gulungan wool merah, lalu letakkan di atas wajah di depan mata bayi. Gerakkan wool dari samping kiri ke kanan kepala atau sebaliknya. Apakah ia dapat mengikuti gerakan Anda dengan menggerakkan kepalanya dari satu sisi hampir sampai pada sisi yang lain?" },
+        { id: 8, sector: "Gerak kasar", text: "Pada saat bayi tengkurap di alas yang datar, apakah ia dapat mengangkat kepalanya seperti pada gambar?", imageSvg: "head45" },
+        { id: 9, sector: "Gerak kasar", text: "Pada saat bayi tengkurap di alas yang datar, apakah ia dapat mengangkat kepalanya sehingga membentuk sudut 45° seperti pada gambar?", imageSvg: "head45" },
+        { id: 10, sector: "Gerak kasar", text: "Pada saat bayi tengkurap di alas yang datar, apakah ia dapat mengangkat kepalanya dengan tegak seperti pada gambar?", imageSvg: "head90" }
+      ],
+      6: [
+        { id: 1, sector: "Gerak halus", text: "Bayi diposisikan terlentang. Ambil gulungan wool merah, letakkan di atas wajah di depan mata bayi. Gerakkan wool dari samping kiri ke kanan kepala. Apakah ia dapat mengikuti gerakan Anda dengan menggerakkan kepala fully dari satu ke sisi yang lain?" },
+        { id: 2, sector: "Gerak kasar", text: "Pada posisi bayi terlentang, pegang kedua tangannya lalu tarik perlahan ke posisi duduk. Dapatkah bayi mempertahankan lehernya secara kaku seperti pada gambar? Jawab 'Tidak' bila kepala bayi jatuh kembali seperti gambar.", imageSvg: "pullToSit" },
+        { id: 3, sector: "Gerak kasar", text: "Ketika bayi tengkurap di alas yang datar, apakah ia dapat mengangkat dada dengan kedua lengannya sebagai penyangga seperti pada gambar?", imageSvg: "chestUp" },
+        { id: 4, sector: "Gerak kasar", text: "Bayi dipangku orang tua atau pengasuh. Dapatkah bayi mempertahankan posisi kepala dalam keadaan tegak dan stabil? Jawab 'Tidak' bila kepala bayi cenderung jatuh ke kanan, kiri, atau ke dadanya." },
+        { id: 5, sector: "Gerak halus", text: "Bayi dipangku orang tua atau pengasuh. Sentuhkan pensil di punggung tangan atau ujung jari bayi (jangan meletakkan di atas telapak tangan bayi). Apakah bayi dapat menggenggam pensil itu selama beberapa detik?" },
+        { id: 6, sector: "Gerak halus", text: "Bayi dipangku orang tua atau pengasuh. Dapatkah bayi mengarahkan matanya pada benda kecil sebesar kacang, kismis atau uang logam? Jawab 'Tidak' jika ia tidak dapat mengarahkan matanya." },
+        { id: 7, sector: "Gerak halus", text: "Bayi dipangku orang tua atau pengasuh. Dapatkah bayi meraih mainan yang diletakkan agak jauh namun masih berada dalam jangkauan tangannya?" },
+        { id: 8, sector: "Gerak kasar", text: "Tanyakan kepada orang tua atau pengasuh, pernahkah bayi berbalik paling sedikit 2 kali, dari terlentang ke tengkurap atau sebaliknya?" },
+        { id: 9, sector: "Bicara dan bahasa", text: "Tanyakan kepada orang tua atau pengasuh, pernahkah bayi mengeluarkan suara gembira bernada tinggi atau memekik tetapi bukan menangis?" },
+        { id: 10, sector: "Sosialisasi dan kemandirian", text: "Tanyakan kepada orang tua atau pengasuh, pernahkah orang tua atau pengasuh melihat bayi tersenyum ketika melihat mainan yang lucu, gambar, atau binatang peliharaan pada saat ia bermain sendiri?" }
+      ],
+      9: [
+        { id: 1, sector: "Gerak halus", text: "Bayi dipangku orang tua atau pengasuh. Taruh kismis di atas meja. Dapatkah bayi memungut dengan tangannya benda-benda kecil seperti kismis, kacang-kacangan, potongan biskuit dengan gerakan miring atau menggerapai seperti gambar?", imageSvg: "raisinPincer" },
+        { id: 2, sector: "Gerak halus", text: "Bayi dipangku orang tua atau pengasuh. Taruh 2 kubus di atas meja, buat agar bayi dapat memungut dan memegang kubus pada masing-masing tangannya. Dapatkah ia melakukannya?" },
+        { id: 3, sector: "Gerak halus", text: "Bayi dipangku orang tua atau pengasuh. Tarik perhatian bayi dengan memperlihatkan gulungan wool merah, kemudian jatuhkan ke lantai. Apakah bayi mencoba mencari benda tersebut, misalnya mencari di bawah meja atau di belakang kursi?" },
+        { id: 4, sector: "Sosialisasi dan kemandirian", text: "Bayi dipangku orang tua atau pengasuh. Letakkan suatu mainan yang diinginkan bayi di luar jangkauannya, apakah ia mencoba mendapatkan mainan dengan mengulurkan lengan atau badannya?" },
+        { id: 5, sector: "Bicara dan bahasa", text: "Tanyakan kepada orang tua atau pengasuh, apakah bayi menengok ke belakang seperti mendengar kedatangan seseorang pada saat bayi sedang bermain sendiri dan seseorang diam-diam datang berdiri di belakangnya? Suara keras tidak ikut dihitung. Jawab 'Ya' hanya jika melihat reaksinya terhadap suara yang perlahan atau bisikan." },
+        { id: 6, sector: "Bicara dan bahasa", text: "Tanyakan kepada orang tua atau pengasuh, apakah anak dapat mengatakan 2 suku kata yang sama, misalnya: 'Ma-ma', 'Da-da' atau 'Pa-pa'? Jawab 'Ya' bila ia dapat mengeluarkan salah satu suara tersebut." },
+        { id: 7, sector: "Sosialisasi dan kemandirian", text: "Tanyakan kepada orang tua atau pengasuh, apakah bayi dapat makan kue kering sendiri?" },
+        { id: 8, sector: "Gerak halus", text: "Tanyakan kepada orang tua atau pengasuh apakah pernah melihat bayi memindahkan mainan atau kue kering dari satu tangan ke tangan yang lain? Benda-benda panjang seperti sendok atau kerincingan bertangkai tidak ikut dinilai." },
+        { id: 9, sector: "Gerak kasar", text: "Tanpa disangga oleh bantal, kursi atau dinding, dapatkah bayi duduk sendiri selama 60 detik?", imageSvg: "sitAlone" },
+        { id: 10, sector: "Gerak kasar", text: "Jika Anda mengangkat bayi melalui ketiaknya ke posisi berdiri, dapatkah ia menyangga sebagian berat badan dengan kedua kakinya? Jawab 'Ya' bila ia mencoba berdiri dan sebagian berat badan tertumpu pada kedua kakinya." }
+      ],
+      12: [
+        { id: 1, sector: "Gerak halus", text: "Bayi dipangku orang tua atau pengasuh. Letakkan pensil di telapak tangan anak. Coba ambil pensil tersebut dengan perlahan-lahan. Apakah anak menggenggam pensil dengan erat dan Anda merasa kesulitan mendapatkan pensil itu kembali?" },
+        { id: 2, sector: "Gerak halus", text: "Bayi dipangku orang tua atau pengasuh. Letakkan kismis di atas meja. Dapatkah anak memungut dengan tangannya benda-benda kecil seperti kismis, kacang-kacangan, potongan biskuit dengan gerakan miring atau menggerapai seperti gambar?", imageSvg: "raisinPincer" },
+        { id: 3, sector: "Gerak halus", text: "Bayi dipangku orang tua atau pengasuh. Berikan 2 kubus kepada bayi. Tanpa bantuan, apakah anak dapat mempertemukan 2 kubus kecil yang ia pegang?" },
+        { id: 4, sector: "Bicara dan bahasa", text: "Sebut 2-3 kata yang dapat ditiru oleh anak (tidak perlu kata-kata yang lengkap). Apakah ia mencoba meniru kata-kata tadi?" },
+        { id: 5, sector: "Gerak kasar", text: "Tanyakan kepada ibu atau pengasuh, apakah anak dapat mengangkat badannya ke posisi berdiri tanpa bantuan?" },
+        { id: 6, sector: "Gerak kasar", text: "Tanyakan kepada ibu atau pengasuh, apakah anak dapat duduk sendiri tanpa bantuan dari posisi tidur atau tengkurap?" },
+        { id: 7, sector: "Bicara dan bahasa", text: "Tanyakan kepada ibu atau pengasuh, apakah anak dapat memahami makna kata 'jangan'?" },
+        { id: 8, sector: "Sosialisasi dan kemandirian", text: "Tanyakan kepada ibu atau pengasuh, apakah anak akan mencari atau terlihat mengharapkan muncul kembali jika ibu atau pengasuh bersembunyi di belakang sesuatu atau di pojok, kemudian muncul dan menghilang secara berulang-ulang di hadapan anak?" },
+        { id: 9, sector: "Sosialisasi dan kemandirian", text: "Tanyakan kepada ibu atau pengasuh, apakah anak dapat membedakan ibu atau pengasuh dengan orang yang belum ia kenal? Ia akan menunjukkan sikap malu-malu atau ragu-ragu pada saat permulaan bertemu dengan orang yang belum dikenalnya." },
+        { id: 10, sector: "Gerak kasar", text: "Berdirikan anak. Apakah anak dapat berdiri dengan berpegangan pada kursi atau meja selama 30 detik atau lebih?" }
+      ],
+      15: [
+        { id: 1, sector: "Gerak halus", text: "Bayi dipangku orang tua atau pengasuh. Berikan 2 kubus kepada anak. Tanpa bantuan, apakah anak dapat mempertemukan 2 kubus kecil yang ia pegang?" },
+        { id: 2, sector: "Gerak halus", text: "Bayi dipangku orang tua atau pengasuh. Berikan sebuah kubus dan cangkir. Apakah anak dapat memasukkan 1 kubus ke dalam cangkir?" },
+        { id: 3, sector: "Gerak kasar", text: "Tanyakan kepada orang tua atau pengasuh, apakah anak dapat berjalan dengan berpegangan?" },
+        { id: 4, sector: "Bicara dan bahasa", text: "Tanyakan kepada orang tua atau pengasuh, apakah anak dapat mengatakan 'papa' ketika ia memanggil atau melihat ayahnya, atau mengatakan 'mama' jika memanggil atau melihat ibunya? Jawab 'Ya' bila anak mengatakan salah satu di antaranya." },
+        { id: 5, sector: "Bicara dan bahasa", text: "Tanyakan kepada orang tua atau pengasuh, apakah anak dapat mengucapkan 1 kata yang bermakna selain 'mama', 'papa', atau nama panggilan orang?" },
+        { id: 6, sector: "Sosialisasi dan kemandirian", text: "Tanyakan kepada orang tua atau pengasuh, apakah anak dapat bertepuk tangan atau melambai-lambai tanpa bantuan? Jawab 'Tidak' bila ia membutuhkan bantuan." },
+        { id: 7, sector: "Sosialisasi dan kemandirian", text: "Tanyakan kepada orang tua atau pengasuh, apakah anak dapat menunjukkan apa yang diinginkannya tanpa menangis atau merengek? Jawab 'Ya' bila ia menunjuk, menarik atau mengeluarkan suara yang menyenangkan." },
+        { id: 8, sector: "Gerak kasar", text: "Coba berdirikan anak. Apakah anak dapat berdiri sendiri tanpa berpegangan selama 30 detik atau lebih?" },
+        { id: 9, sector: "Gerak kasar", text: "Letakkan kubus di lantai, tanpa berpegangan atau menyentuh lantai, apakah anak dapat membungkuk untuk memungut kubus di lantai dan kemudian berdiri kembali?" },
+        { id: 10, sector: "Gerak kasar", text: "Apakah anak dapat berjalan di sepanjang ruangan tanpa jatuh atau terhuyung-huyung?" }
+      ],
+      18: [
+        { id: 1, sector: "Gerak halus", text: "Bayi dipangku orang tua atau pengasuh. Berikan anak sebuah pensil dan kertas. Apakah anak dapat mencoret-coret kertas tanpa bantuan atau petunjuk?" },
+        { id: 2, sector: "Bicara dan bahasa", text: "Tanyakan kepada orang tua atau pengasuh, apakah anak dapat menyebutkan sedikitnya 3 kata yang bermakna?" },
+        { id: 3, sector: "Sosialisasi dan kemandirian", text: "Tanyakan kepada orang tua atau pengasuh, apakah anak dapat menunjukkan apa yang diinginkannya tanpa menangis atau merengek?" },
+        { id: 4, sector: "Sosialisasi dan kemandirian", text: "Tanyakan kepada orang tua atau pengasuh, apakah anak dapat minum dari cangkir atau gelas sendiri tanpa banyak yang tumpah?" },
+        { id: 5, sector: "Sosialisasi dan kemandirian", text: "Tanyakan kepada orang tua atau pengasuh, apakah anak suka meniru bila ibu atau pengasuh sedang melakukan pekerjaan rumah tangga (merapikan mainan, menyapu, dll)?" },
+        { id: 6, sector: "Gerak halus", text: "Gelindingkan bola tenis ke arah anak. Apakah anak dapat menggelindingkan atau melempar bola tersebut kembali kepada Anda?" },
+        { id: 7, sector: "Gerak kasar", text: "Letakkan kubus di lantai, tanpa berpegangan atau menyentuh lantai, apakah anak dapat membungkuk untuk memungut kubus di lantai dan kemudian berdiri kembali?" },
+        { id: 8, sector: "Gerak kasar", text: "Minta anak untuk berjalan sepanjang ruangan. Dapatkah ia berjalan tanpa terhuyung-huyung atau terjatuh?" },
+        { id: 9, sector: "Gerak kasar", text: "Dapatkah anak berjalan mundur minimal 5 langkah tanpa kehilangan keseimbangan?" },
+        { id: 10, sector: "Bicara dan bahasa", text: "Berikan anak perintah berikut ini dengan bantuan telunjuk atau isyarat: 'Ambil kertas', 'Ambil pensil', 'Tutup pintu'. Dapatkah anak melakukan perintah tersebut dengan bantuan telunjuk atau isyarat?" }
+      ],
+      21: [
+        { id: 1, sector: "Gerak halus", text: "Bayi dipangku orang tua atau pengasuh. Berikan anak sebuah pensil dan kertas. Apakah anak dapat mencoret-coret kertas tanpa bantuan atau petunjuk?" },
+        { id: 2, sector: "Gerak halus", text: "Bayi dipangku orang tua atau pengasuh. Minta anak untuk menyusun kubus. Apakah anak dapat menyusun 2 kubus?" },
+        { id: 3, sector: "Bicara dan bahasa", text: "Bayi dipangku orang tua atau pengasuh. Tunjukkan gambar di bawah pada anak dan minta ia untuk menunjuk gambar sesuai dengan yang Anda sebutkan namanya. Apakah anak dapat menunjuk minimal 1 gambar?", imageSvg: "animalGrid" },
+        { id: 4, sector: "Bicara dan bahasa", text: "Bayi dipangku orang tua atau pengasuh. Tanpa bimbingan, petunjuk, atau bantuan Anda, dapatkah anak menunjuk paling sedikit 1 bagian tubuhnya dengan benar (rambut, mata, hidung, mulut, atau bagian badan yang lain)?" },
+        { id: 5, sector: "Bicara dan bahasa", text: "Tanyakan kepada orang tua atau pengasuh, apakah anak dapat mengucapkan minimal 7 kata yang mempunyai arti (selain kata 'mama' dan 'papa')?" },
+        { id: 6, sector: "Sosialisasi dan kemandirian", text: "Tanyakan kepada orang tua atau pengasuh, apakah anak dapat minum dari cangkir atau gelas sendiri tanpa banyak yang tumpah?" },
+        { id: 7, sector: "Sosialisasi dan kemandirian", text: "Tanyakan kepada orang tua atau pengasuh, apakah anak suka meniru bila ibu atau pengasuh sedang melakukan pekerjaan rumah tangga (merapikan mainan, menyapu, dll)?" },
+        { id: 8, sector: "Gerak kasar", text: "Tanyakan kepada orang tua atau pengasuh, apakah anak dapat berlari tanpa terjatuh?" },
+        { id: 9, sector: "Gerak kasar", text: "Letakkan kubus di lantai, tanpa berpegangan atau menyentuh lantai, apakah anak dapat membungkuk untuk memungut kubus di lantai dan kemudian berdiri kembali?" },
+        { id: 10, sector: "Gerak kasar", text: "Dapatkah anak berjalan mundur minimal 5 langkah tanpa kehilangan keseimbangan?" }
+      ],
+      24: [
+        { id: 1, sector: "Gerak halus", text: "Bayi dipangku orang tua atau pengasuh. Berikan anak sebuah pensil dan kertas. Apakah anak dapat mencoret-coret kertas tanpa bantuan atau petunjuk?" },
+        { id: 2, sector: "Gerak halus", text: "Bayi dipangku orang tua atau pengasuh. Minta anak untuk menyusun kubus. Apakah anak dapat menyusun 4 kubus?" },
+        { id: 3, sector: "Bicara dan bahasa", text: "Bayi dipangku orang tua atau pengasuh. Tanpa bimbingan, petunjuk, atau bantuan Anda, dapatkah anak menunjuk paling sedikit 2 bagian tubuhnya dengan benar (rambut, mata, hidung, mulut, atau bagian badan yang lain)?" },
+        { id: 4, sector: "Bicara dan bahasa", text: "Tanyakan kepada orang tua atau pengasuh, apakah anak mampu menggabungkan 2 kata berbeda ketika berbicara, misalnya 'Minum susu' atau 'Main bola'? 'Terima kasih' dan 'Da-dah' tidak termasuk." },
+        { id: 5, sector: "Sosialisasi dan kemandirian", text: "Tanyakan kepada orang tua atau pengasuh, apakah anak dapat melepas pakaiannya seperti baju, rok, atau celana?" },
+        { id: 6, sector: "Sosialisasi dan kemandirian", text: "Tanyakan kepada orang tua atau pengasuh, apakah anak dapat makan dengan menggunakan sendok sendiri tanpa banyak yang tumpah?" },
+        { id: 7, sector: "Gerak kasar", text: "Tanyakan kepada orang tua atau pengasuh, apakah anak dapat berlari tanpa terjatuh?" },
+        { id: 8, sector: "Gerak kasar", text: "Tanyakan kepada orang tua atau pengasuh, apakah anak dapat berjalan naik tangga sendiri? Jawab 'Ya' jika ia naik tangga dengan posisi tegak atau berpegangan pada dinding atau pegangan tangga. Jawab 'Tidak' jika ia naik tangga dengan merangkak, orang tua tidak memperbolehkan anak naik tangga, atau anak harus berpegangan pada seseorang." },
+        { id: 9, sector: "Gerak kasar", text: "Letakkan bola tenis di depan kaki anak. Apakah ia dapat menendang ke depan tanpa berpegangan pada apapun?" },
+        { id: 10, sector: "Bicara dan bahasa", text: "Ikuti perintah dengan seksama. Jangan memberi isyarat dengan telunjuk atau mata pada saat memberikan perintah berikut ini: 'Ambil kertas', 'Ambil pensil', 'Tutup pintu'. Dapatkah anak melakukan perintah tersebut?" }
+      ],
+      30: [
+        { id: 1, sector: "Gerak halus", text: "Beri kubus di depan anak. Dapatkah anak menyusun 4 buah kubus menyerupai kereta api dengan cerobong asap (dicontohkan)?", imageSvg: "trainCubes" },
+        { id: 2, sector: "Gerak halus", text: "Buat garis lurus ke bawah sepanjang sekurang-kurangnya 2,5 cm. Minta anak untuk menggambar garis lain di samping garis ini. Jawab 'Ya' bila ia menggambar garis seperti ini (tegak lurus paralel), Jawab 'Tidak' bila ia menggambar garis melengkung atau menyilang.", imageSvg: "straightLineTest" },
+        { id: 3, sector: "Bicara dan bahasa", text: "Tanpa bimbingan, petunjuk, atau bantuan Anda, dapatkah anak menyebut 2 gambar di antara gambar-gambar di bawah dengan benar? Menyebut dengan suara binatang tidak ikut dinilai.", imageSvg: "animalGrid" },
+        { id: 4, sector: "Bicara dan bahasa", text: "Tanpa bimbingan, petunjuk, atau bantuan Anda, dapatkah anak menunjuk 4 gambar di antara gambar-gambar di atas ini dengan benar ketika Anda sebutkan namanya?", imageSvg: "animalGrid" },
+        { id: 5, sector: "Bicara dan bahasa", text: "Tanpa bimbingan, petunjuk, atau bantuan Anda, dapatkah anak menunjuk paling sedikit 6 bagian tubuhnya?" },
+        { id: 6, sector: "Bicara dan bahasa", text: "Tanyakan kepada orang tua atau pengasuh, apakah anak dapat memahami perintah yang terdiri dari 2 langkah, misalnya 'Tolong ambil bola dan berikan kepada Ayah'?" },
+        { id: 7, sector: "Sosialisasi dan kemandirian", text: "Tanyakan kepada orang tua atau pengasuh, dapatkah anak berpakaian sendiri seperti baju, rok, celana (topi dan kaos kaki tidak ikut dinilai)?" },
+        { id: 8, sector: "Sosialisasi dan kemandirian", text: "Tanyakan kepada orang tua atau pengasuh, dapatkah anak bermain peran, misalnya menyuapi boneka?" },
+        { id: 9, sector: "Gerak kasar", text: "Letakkan bola tenis di depan kaki anak. Dapatkah anak menendang ke depan tanpa berpegangan pada apapun? Mendorong bola tidak ikut dinilai." },
+        { id: 10, sector: "Gerak kasar", text: "Minta anak untuk melompat atau mengangkat kedua kakinya pada saat bersamaan. Dapatkah ia melakukannya?" }
+      ],
+      36: [
+        { id: 1, sector: "Gerak halus", text: "Beri kubus di depan anak. Dapatkah anak menyusun 6 buah kubus satu persatu di atas kubus yang lain tanpa menjatuhkan kubus tersebut?" },
+        { id: 2, sector: "Gerak halus", text: "Buat garis lurus ke bawah sepanjang sekurang-kurangnya 2,5 cm. Minta anak untuk menggambar garis lain di samping garis ini. Jawab 'Ya' bila ia menggambar garis lurus sejajar, Jawab 'Tidak' bila melengkung/acak.", imageSvg: "straightLineTest" },
+        { id: 3, sector: "Bicara dan bahasa", text: "Tanpa bimbingan, petunjuk, atau bantuan Anda, dapatkah anak menyebut 4 gambar di antara gambar-gambar di bawah ini dengan benar? Menyebut dengan suara binatang tidak ikut dinilai.", imageSvg: "animalGrid" },
+        { id: 4, sector: "Bicara dan bahasa", text: "Tanyakan kepada orang tua atau pengasuh, apakah anak dapat memahami perintah yang terdiri dari 2 langkah, misalnya 'Tolong ambil bola dan berikan kepada Ayah'?" },
+        { id: 5, sector: "Bicara dan bahasa", text: "Tanyakan kepada orang tua atau pengasuh, apakah sebagian dari bicara anak dapat dipahami oleh orang asing (yang tidak bertemu setiap hari)?" },
+        { id: 6, sector: "Bicara dan bahasa", text: "Tanyakan kepada orang tua atau pengasuh, dapatkah anak merangkai kalimat sederhana yang terdiri dari minimal 3 kata, misalnya 'Aku makan roti' atau 'Ibu minta susu'?" },
+        { id: 7, sector: "Sosialisasi dan kemandirian", text: "Tanyakan kepada orang tua atau pengasuh, dapatkah anak menggosok gigi dengan bantuan?" },
+        { id: 8, sector: "Sosialisasi dan kemandirian", text: "Tanyakan kepada orang tua atau pengasuh, dapatkah anak mengenakan baju, celana, atau sepatu sendiri (tidak termasuk mengancing dan menali)?" },
+        { id: 9, sector: "Gerak kasar", text: "Berikan kepada anak sebuah bola tenis. Minta ia untuk melemparkan ke arah dada Anda. Dapatkah anak melempar bola dengan lurus ke arah perut atau dada Anda dari jarak 1,5 meter?" },
+        { id: 10, sector: "Gerak kasar", text: "Letakkan selembar kertas seukuran buku ini di atas lantai. Apakah anak dapat melompati bagian lebar kertas dengan mengangkat kedua kakinya secara bersamaan tanpa didahului lari?" }
+      ],
+      42: [
+        { id: 1, sector: "Gerak halus", text: "Buat garis lurus ke bawah sepanjang sekurang-kurangnya 2,5 cm. Minta anak untuk menggambar garis lain di samping garis ini. Jawab 'Ya' bila ia menggambar garis sejajar, Jawab 'Tidak' bila melengkung/acak.", imageSvg: "straightLineTest" },
+        { id: 2, sector: "Gerak halus", text: "Beri kubus di depan anak. Dapatkah anak menyusun 8 buah kubus satu persatu di atas kubus yang lain tanpa menjatuhkannya?" },
+        { id: 3, sector: "Bicara dan bahasa", text: "Tunjukkan anak gambar di bawah ini dan tanyakan: 'Mana yang dapat terbang?', 'Mana yang dapat mengeong?', 'Mana yang dapat bicara?', 'Mana yang dapat menggonggong?', 'Mana yang dapat meringkik?'. Apakah anak dapat menunjuk 2 kegiatan yang sesuai?", imageSvg: "animalActionGrid" },
+        { id: 4, sector: "Bicara dan bahasa", text: "Tanyakan kepada anak pertanyaan berikut ini satu persatu: 'Apa yang kamu lakukan bila kedinginan?' (pakai jaket/selimut), 'Apa yang kamu lakukan bila kamu kelelahan?' (tidur/istirahat), 'Apa yang kamu lakukan bila kamu merasa lapar?' (makan), 'Apa yang kamu lakukan bila kamu merasa haus?' (minum). Apakah anak dapat menjawab 3 pertanyaan dengan benar tanpa gerakan dan isyarat?" },
+        { id: 5, sector: "Bicara dan bahasa", text: "Minta anak untuk menyebut 1 warna. Dapatkah anak menyebut 1 warna dengan benar?" },
+        { id: 6, sector: "Sosialisasi dan kemandirian", text: "Tanyakan kepada orang tua atau pengasuh, apakah anak dapat mencuci tangannya sendiri dengan baik setelah makan?" },
+        { id: 7, sector: "Sosialisasi dan kemandirian", text: "Tanyakan kepada orang tua atau pengasuh, dapatkah anak menyebut nama teman bermain di luar rumah atau saudara yang tidak tinggal serumah?" },
+        { id: 8, sector: "Sosialisasi dan kemandirian", text: "Tanyakan kepada orang tua atau pengasuh, dapatkah anak mengenakan kaos (T-shirt) tanpa dibantu?" },
+        { id: 9, sector: "Gerak kasar", text: "Letakkan selembar kertas seukuran buku ini di atas lantai. Apakah anak dapat melompati bagian lebar kertas dengan mengangkat kedua kakinya secara bersamaan tanpa didahului lari?" },
+        { id: 10, sector: "Gerak kasar", text: "Minta anak untuk berdiri 1 kaki tanpa berpegangan. Jika perlu tunjukkan caranya dan beri anak kesempatan sebanyak 3 kali. Dapatkah ia mempertahankan keseimbangan dalam waktu 1 detik atau lebih?" }
+      ],
+      48: [
+        { id: 1, sector: "Gerak halus", text: "Berikan contoh membuat jembatan dari 3 buah kubus, yaitu dengan meletakkan 2 kubus dengan sedikit jarak (kira-kira satu jari), lalu letakkan balok ketiga di atas kedua balok sehingga terbentuk seperti jembatan. Minta anak untuk melakukan. Dapatkah anak melakukannya?", imageSvg: "bridgeCubes" },
+        { id: 2, sector: "Gerak halus", text: "Beri pensil dan kertas. Jangan membantu anak dan jangan menyebut lingkaran. Buatlah lingkaran di atas kertas tersebut. Minta anak menirunya. Dapatkah anak menggambar lingkaran?", imageSvg: "circleTest" },
+        { id: 3, sector: "Bicara dan bahasa", text: "Tunjukkan anak gambar di bawah ini dan tanyakan: 'Yang mana yang dapat terbang?', 'Yang mana yang dapat mengeong?', 'Yang mana yang dapat bicara?', 'Yang mana yang dapat menggonggong?', 'Yang mana yang dapat meringkik?'. Apakah anak dapat menunjuk 2 kegiatan yang sesuai?", imageSvg: "animalActionGrid" },
+        { id: 4, sector: "Bicara dan bahasa", text: "Dapatkah anak menyebut nama lengkapnya tanpa dibantu? Jawab 'Tidak' jika ia menyebut sebagian namanya atau ucapannya sulit dimengerti." },
+        { id: 5, sector: "Bicara dan bahasa", text: "Mengenal konsep angka satu: Letakkan 5 kubus di atas meja dan selembar kertas di samping kubus. Katakan kepada anak 'Ambil 1 kubus dan letakkan di atas kertas'. Setelah anak selesai meletakkan, tanyakan 'Ada berapa banyak kubus di atas kertas?'. Dapatkah anak melakukan dengan hanya mengambil satu kubus dan bisa menyebutkan 'Satu'?" },
+        { id: 6, sector: "Bicara dan bahasa", text: "Tanyakan kepada anak pertanyaan di bawah satu persatu: 'Apa kegunaan kursi?' (untuk duduk), 'Apa kegunaan cangkir?' (untuk minum), 'Apa kegunaan pensil?' (untuk menulis/mencoret/menggambar). Dapatkah anak menjawab ketiga pertanyaan terkait kegunaan benda tersebut dengan benar?" },
+        { id: 7, sector: "Sosialisasi dan kemandirian", text: "Tanyakan kepada orang tua atau pengasuh, dapatkah anak mengikuti peraturan permainan saat bermain dengan teman-temannya (misal: ular tangga, petak umpet, dll)?" },
+        { id: 8, sector: "Sosialisasi dan kemandirian", text: "Tanyakan kepada orang tua atau pengasuh, dapatkah anak mengenakan kaos (T-shirt) tanpa dibantu?" },
+        { id: 9, sector: "Gerak kasar", text: "Letakkan selembar kertas seukuran buku ini di atas lantai. Apakah anak dapat melompati bagian lebar kertas dengan mengangkat kedua kakinya secara bersamaan tanpa didahului lari?" },
+        { id: 10, sector: "Gerak kasar", text: "Minta anak untuk berdiri 1 kaki tanpa berpegangan. Jika perlu tunjukkan caranya dan beri anak kesempatan sebanyak 3 kali. Dapatkah ia mempertahankan keseimbangan dalam waktu 2 detik atau lebih?" }
+      ],
+      54: [
+        { id: 1, sector: "Gerak halus", text: "Jangan mengoreksi atau membantu anak. Jangan menyebut kata 'Lebih panjang'. Perlihatkan gambar kedua garis ini pada anak. Tanyakan: 'Mana garis yang lebih panjang?'. Minta anak menunjuk garis yang lebih panjang. Setelah anak menunjuk, putar lembar ini dan ulangi pertanyaan tersebut. Apakah anak dapat menunjuk garis yang lebih panjang sebanyak 3 kali dengan benar?", imageSvg: "lineLengthTest" },
+        { id: 2, sector: "Gerak halus", text: "Jangan membantu anak dan jangan memberitahu nama gambar ini. Minta anak untuk menggambar seperti contoh di kertas kosong yang tersedia. Berikan 3 kali kesempatan. Apakah anak dapat menggambar + seperti contoh?", imageSvg: "plusSignTest" },
+        { id: 3, sector: "Gerak halus", text: "Berikan anak pensil dan kertas lalu katakan kepada anak 'Buatlah gambar orang' (anak laki-laki, anak perempuan, papa, mama, dll). Hitunglah berapa bagian tubuh yang tergambar. Untuk bagian tubuh yang berpasangan seperti mata, telinga, lengan dan kaki, setiap pasang dinilai 1 bagian. Dapatkah anak menggambar orang dengan sedikitnya 3 bagian tubuh?", imageSvg: "humanDraw3" },
+        { id: 4, sector: "Bicara dan bahasa", text: "Memahami konsep 2 warna: Minta anak untuk menyebutkan 2 warna. Dapatkah anak menyebut 2 warna dengan benar?" },
+        { id: 5, sector: "Bicara dan bahasa", text: "Tanyakan kepada orang tua atau pengasuh, apakah bicara anak mampu dipahami seluruhnya oleh orang lain (yang tidak bertemu setiap hari)?" },
+        { id: 6, sector: "Sosialisasi dan kemandirian", text: "Tanyakan kepada orang tua atau pengasuh, dapatkah anak mengikuti peraturan permainan saat bermain dengan teman-temannya (misal: ular tangga, petak umpet, dll)?" },
+        { id: 7, sector: "Sosialisasi dan kemandirian", text: "Tanyakan kepada orang tua atau pengasuh, dapatkah anak menggosok gigi tanpa dibantu?" },
+        { id: 8, sector: "Sosialisasi dan kemandirian", text: "Tanyakan kepada orang tua atau pengasuh, apakah anak dapat mengancingkan bajunya atau pakaian boneka?" },
+        { id: 9, sector: "Bicara dan bahasa", text: "Mengenal konsep 2 kata depan: Minta anak mengikuti perintah (di atas meja, di bawah meja, di depan ibu, di samping ibu, di belakang ibu) tanpa isyarat. Dapatkah anak melakukan sedikitnya 2 perintah (memahami 2 kata depan)?" },
+        { id: 10, sector: "Gerak kasar", text: "Minta anak untuk berdiri 1 kaki tanpa berpegangan. Jika perlu tunjukkan caranya dan beri anak kesempatan sebanyak 3 kali. Dapatkah ia mempertahankan keseimbangan dalam waktu 2 detik atau lebih?" }
+      ],
+      60: [
+        { id: 1, sector: "Gerak halus", text: "Perlihatkan gambar kedua garis ini pada anak. Tanyakan: 'Mana garis yang lebih panjang?'. Minta anak menunjuk garis yang lebih panjang. Setelah anak menunjuk, putar lembar ini dan ulangi pertanyaan tersebut. Apakah anak dapat menunjuk garis yang lebih panjang sebanyak 3 kali dengan benar?", imageSvg: "lineLengthTest" },
+        { id: 2, sector: "Gerak halus", text: "Berikan anak pensil dan kertas lalu katakan kepada anak 'Buatlah gambar orang'. Hitunglah berapa bagian tubuh yang tergambar (setiap pasang dinilai 1 bagian). Dapatkah anak menggambar orang dengan sedikitnya 3 bagian tubuh?", imageSvg: "humanDraw3" },
+        { id: 3, sector: "Bicara dan bahasa", text: "Memahami konsep 4 warna: Minta anak untuk menyebutkan 4 warna. Dapatkah anak menyebut keempat warna tersebut dengan benar?" },
+        { id: 4, sector: "Bicara dan bahasa", text: "Tanyakan kepada anak pertanyaan berikut satu persatu: 'Apa yang kamu lakukan saat kedinginan?', 'Apa yang kamu lakukan saat kelelahan?', 'Apa yang kamu lakukan saat merasa lapar?', 'Apa yang kamu lakukan saat merasa haus?'. Dapatkah anak menjawab 3 pertanyaan terkait kata sifat tersebut dengan benar?" },
+        { id: 5, sector: "Sosialisasi dan kemandirian", text: "Tanyakan kepada orang tua atau pengasuh, apakah anak dapat mengancingkan bajunya atau pakaian boneka?" },
+        { id: 6, sector: "Sosialisasi dan kemandirian", text: "Tanyakan kepada orang tua atau pengasuh, apakah anak bereaksi dengan tenang dan tidak rewel (tanpa menangis atau menggelayut) pada saat ditinggal oleh orang tua atau pengasuh?" },
+        { id: 7, sector: "Sosialisasi dan kemandirian", text: "Tanyakan kepada orang tua atau pengasuh, dapatkah anak sepenuhnya berpakaian sendiri tanpa dibantu?" },
+        { id: 8, sector: "Bicara dan bahasa", text: "Mengenal konsep 4 kata depan: Minta anak mengikuti perintah (di atas, di bawah, di depan, di samping, di belakang meja/ibu) tanpa isyarat. Dapatkah anak melakukan sedikitnya 4 perintah (memahami 4 kata depan)?" },
+        { id: 9, sector: "Gerak kasar", text: "Minta anak untuk berdiri 1 kaki tanpa berpegangan. Jika perlu tunjukkan caranya dan beri anak kesempatan sebanyak 3 kali. Dapatkah ia mempertahankan keseimbangan dalam waktu 4 detik atau lebih?" },
+        { id: 10, sector: "Gerak kasar", text: "Minta anak untuk melompat dengan 1 kaki beberapa kali tanpa berpegangan (lompatan dengan 2 kaki tidak ikut dinilai). Dapatkah anak melompat 2-3 kali dengan 1 kaki?" }
+      ],
+      66: [
+        { id: 1, sector: "Gerak halus", text: "Menggambar +: Jangan membantu anak dan jangan memberitahu nama gambar ini. Minta anak untuk menggambar seperti contoh di kertas kosong yang tersedia. Berikan 3 kali kesempatan. Apakah anak dapat menggambar + seperti contoh?", imageSvg: "plusSignTest" },
+        { id: 2, sector: "Gerak halus", text: "Menggambar kotak dengan dicontohkan: Berikan kepada anak pensil dan kertas. Tunjukkan contoh gambar kotak. Anda bisa mencontohkan cara membuat kotak. Dapatkah anak menggambar kotak seperti contoh?", imageSvg: "squareTest" },
+        { id: 3, sector: "Gerak halus", text: "Menggambar orang dengan sedikitnya 6 bagian tubuh: Berikan anak pensil dan kertas lalu katakan 'Buatlah gambar orang'. Hitunglah berapa bagian tubuh yang tergambar (setiap pasang dinilai 1 bagian). Dapatkah anak menggambar orang dengan sedikitnya 6 bagian tubuh?", imageSvg: "humanDraw6" },
+        { id: 4, sector: "Bicara dan bahasa", text: "Mengetahui konsep angka 5: Letakkan 8 kubus di atas meja dan selembar kertas di samping kubus. Katakan kepada anak 'Ambil 5 kubus dan letakkan di atas kertas'. Setelah anak selesai, tanyakan 'Ada berapa banyak kubus di atas kertas?'. Dapatkah anak melakukannya?" },
+        { id: 5, sector: "Bicara dan bahasa", text: "Memahami/mengartikan 5 kata: Katakan 'Saya akan mengucapkan 1 kata dan saya ingin kamu menyebutkan apa arti kata itu' (bola, sungai, meja, mobil/motor, rumah, pisang, pintu, atap). Anak dikatakan dapat mengartikan jika sesuai kegunaan, bentuk, bahan dasar, atau kategori umum. Dapatkah anak mengartikan 5 kata yang sesuai?" },
+        { id: 6, sector: "Bicara dan bahasa", text: "Mengetahui konsep analogi berlawanan: Minta anak melengkapi kalimat: 'Jika kuda besar, maka tikus...?' (kecil), 'Jika api panas, maka es...?' (dingin), 'Jika ibu seorang wanita, maka ayah seorang...?' (pria/laki-laki). Apakah anak menjawab ketiga pertanyaan dengan benar?" },
+        { id: 7, sector: "Sosialisasi dan kemandirian", text: "Tanyakan kepada orang tua atau pengasuh, apakah anak bereaksi dengan tenang dan tidak rewel (tanpa menangis atau menggelayut) pada saat ditinggal oleh orang tua atau pengasuh?" },
+        { id: 8, sector: "Sosialisasi dan kemandirian", text: "Tanyakan kepada orang tua atau pengasuh, dapatkah anak sepenuhnya berpakaian sendiri tanpa dibantu?" },
+        { id: 9, sector: "Gerak kasar", text: "Minta anak untuk berdiri 1 kaki tanpa berpegangan. Jika perlu tunjukkan caranya dan beri anak kesempatan sebanyak 3 kali. Dapatkah ia mempertahankan keseimbangan dalam waktu 6 detik atau lebih?" },
+        { id: 10, sector: "Gerak kasar", text: "Apakah anak dapat menangkap bola kecil sebesar bola tenis atau bola kasti hanya dengan menggunakan kedua tangannya?" }
+      ],
+      72: [
+        { id: 1, sector: "Gerak halus", text: "Menggambar kotak tanpa dicontohkan: Berikan kepada anak pensil dan kertas. Tunjukkan kepada anak contoh gambar kotak. Tanpa menyebutkan nama dan tanpa mencontohkan cara menggambarnya, katakan 'Gambarlah yang seperti gambar ini'. Dapatkah anak menggambar kotak seperti contoh?", imageSvg: "squareTest" },
+        { id: 2, sector: "Gerak halus", text: "Menggambar orang dengan sedikitnya 6 bagian tubuh: Berikan anak pensil dan kertas lalu katakan 'Buatlah gambar orang'. Hitunglah berapa bagian tubuh yang tergambar (setiap pasang dinilai 1 bagian). Dapatkah anak menggambar orang dengan sedikitnya 6 bagian tubuh?", imageSvg: "humanDraw6" },
+        { id: 3, sector: "Bicara dan bahasa", text: "Mengetahui konsep analogi berlawanan: Minta anak melengkapi kalimat: 'Jika kuda besar, maka tikus...?' (kecil), 'Jika api panas, maka es...?' (dingin), 'Jika ibu seorang wanita, maka ayah seorang...?' (pria/laki-laki), 'Jika pagi ada matahari, malam ada...?' (bulan). Apakah anak menjawab ketiga pertanyaan dengan benar?" },
+        { id: 4, sector: "Bicara dan bahasa", text: "Memahami/mengartikan 7 kata: Sebutkan kata (bola, sungai, meja, mobil/motor, rumah, pisang, pintu, atap). Dapatkah anak mengartikan 7 kata yang sesuai dengan istilah kegunaan, bentuk, terbuat dari apa, atau kategori umum?" },
+        { id: 5, sector: "Bicara dan bahasa", text: "Mengetahui komposisi benda: Tanyakan 'Sendok dibuat dari apa?' (besi/baja/plastik/kayu), 'Sepatu dibuat dari apa?' (kulit/karet/kain/plastik/kayu), 'Pintu dibuat dari apa?' (kayu/besi/kaca). Apakah anak dapat menjawab ketiga pertanyaan di atas dengan benar?" },
+        { id: 6, sector: "Sosialisasi dan kemandirian", text: "Tanyakan kepada orang tua atau pengasuh, apakah anak dapat menggosok giginya tanpa bantuan?" },
+        { id: 7, sector: "Sosialisasi dan kemandirian", text: "Tanyakan kepada orang tua atau pengasuh, apakah anak dapat menyiapkan dan mengambil makanan tanpa bantuan, termasuk menggunakan mangkok, sendok, menuangkan makanan dan susu ke mangkok tanpa banyak tumpah?" },
+        { id: 8, sector: "Gerak kasar", text: "Apakah anak dapat menangkap bola kecil sebesar bola tenis atau bola kasti hanya dengan menggunakan kedua tangannya?" },
+        { id: 9, sector: "Gerak kasar", text: "Tunjukkan kepada anak bagaimana cara berjalan di garis lurus dengan menempatkan tumit dari 1 kaki di depan jari kaki lain. Berjalanlah 8 langkah, lalu minta anak melakukannya (3 kali kesempatan). Dapatkah anak melakukannya sebanyak 4 langkah atau lebih dengan meletakkan tumit tidak lebih dari 2,5 cm dari jari kaki lain tanpa berpegangan?" },
+        { id: 10, sector: "Gerak kasar", text: "Minta anak untuk berdiri 1 kaki tanpa berpegangan. Jika perlu tunjukkan caranya dan beri anak kesempatan sebanyak 3 kali. Dapatkah ia mempertahankan keseimbangan dalam waktu 11 detik atau lebih?" }
+      ]
+    };
+
+    const stimulationTipsBySector = {
+      "Gerak halus": [
+        "Ajak anak bermain balok/kubus, memasukkan benda kecil ke wadah, serta mewarnai atau menggambar bersama.",
+        "Latih keterampilan jari tangan dengan meremas, melipat kertas, atau meronce sesuai tahap usianya."
+      ],
+      "Sosialisasi dan kemandirian": [
+        "Beri kesempatan anak untuk melakukan kegiatan sendiri seperti makan, minum, memakai baju, dan menggosok gigi.",
+        "Ajak anak berinteraksi dengan teman sebaya dan ajarkan aturan bermain bersama secara positif."
+      ],
+      "Gerak kasar": [
+        "Latih kekuatan fisik dan keseimbangan melalui berjalan di garis lurus, melompat, menendang/melempar bola, dan berdiri 1 kaki.",
+        "Ciptakan permainan fisik aktif yang aman di luar ruangan atau di lingkungan rumah."
+      ],
+      "Bicara dan bahasa": [
+        "Sering ajak anak berbicara dengan ejaan yang jelas (tidak cadel), bacakan buku cerita bergambar, dan nyanyikan lagu anak.",
+        "Latih pemahaman konsep warna, bentuk, kata depan, angka, serta minta anak menceritakan kembali pengalamannya."
+      ]
+    };
+
+    function renderSvgIllustration(key) {
+      if (!key) return '';
+      let svgContent = '';
+
+      switch (key) {
+        case 'head45':
+          svgContent = `<svg viewBox="0 0 200 100" class="w-full h-32 bg-purple-50 rounded-2xl p-2 border border-purple-200"><path d="M 20 80 Q 80 80 140 85" stroke="#94A3B8" stroke-width="4" fill="none"/><circle cx="60" cy="50" r="16" fill="#FDE047" stroke="#334155" stroke-width="2"/><path d="M 70 65 L 120 75" stroke="#38BDF8" stroke-width="8" stroke-linecap="round"/><line x1="60" y1="50" x2="100" y2="50" stroke="#EF4444" stroke-width="2" stroke-dasharray="4"/><text x="110" y="45" font-size="12" font-weight="bold" fill="#EF4444">45°</text></svg>`;
+          break;
+        case 'head90':
+          svgContent = `<svg viewBox="0 0 200 100" class="w-full h-32 bg-purple-50 rounded-2xl p-2 border border-purple-200"><path d="M 20 85 L 180 85" stroke="#94A3B8" stroke-width="4"/><circle cx="60" cy="35" r="16" fill="#FDE047" stroke="#334155" stroke-width="2"/><path d="M 60 51 L 60 85" stroke="#38BDF8" stroke-width="8" stroke-linecap="round"/><text x="80" y="40" font-size="12" font-weight="bold" fill="#10B981">Tegak 90°</text></svg>`;
+          break;
+        case 'pullToSit':
+          svgContent = `<svg viewBox="0 0 240 100" class="w-full h-32 bg-slate-50 rounded-2xl p-2 border border-slate-200"><g transform="translate(10,10)"><text x="0" y="12" font-size="10" font-weight="bold" fill="#10B981">JAWAB: YA (Leher Kaku Tegak)</text><circle cx="30" cy="40" r="12" fill="#FDE047" stroke="#334155"/><path d="M 30 52 L 50 70" stroke="#38BDF8" stroke-width="6"/></g><g transform="translate(130,10)"><text x="0" y="12" font-size="10" font-weight="bold" fill="#EF4444">JAWAB: TIDAK (Kepala Jatuh Kembali)</text><circle cx="20" cy="55" r="12" fill="#FDE047" stroke="#334155"/><path d="M 30 52 L 50 70" stroke="#38BDF8" stroke-width="6"/></g></svg>`;
+          break;
+        case 'chestUp':
+          svgContent = `<svg viewBox="0 0 200 100" class="w-full h-32 bg-purple-50 rounded-2xl p-2 border border-purple-200"><path d="M 10 85 L 190 85" stroke="#94A3B8" stroke-width="4"/><circle cx="50" cy="35" r="14" fill="#FDE047" stroke="#334155" stroke-width="2"/><path d="M 50 49 L 90 70 L 140 85" stroke="#38BDF8" stroke-width="8" stroke-linecap="round"/><path d="M 65 60 L 65 85" stroke="#F59E0B" stroke-width="5"/><text x="100" y="40" font-size="11" font-weight="bold" fill="#8B5CF6">Dada Terangkat Ditopang Lengan</text></svg>`;
+          break;
+        case 'raisinPincer':
+          svgContent = `<svg viewBox="0 0 200 100" class="w-full h-32 bg-amber-50 rounded-2xl p-2 border border-amber-200"><circle cx="100" cy="70" r="5" fill="#78350F"/><path d="M 60 30 Q 85 50 95 65" stroke="#FDBA74" stroke-width="7" stroke-linecap="round" fill="none"/><path d="M 130 30 Q 110 50 103 65" stroke="#FDBA74" stroke-width="5" stroke-linecap="round" fill="none"/><text x="30" y="20" font-size="11" font-weight="bold" fill="#92400E">Gerakan Miring / Menggerapai Kismis</text></svg>`;
+          break;
+        case 'sitAlone':
+          svgContent = `<svg viewBox="0 0 200 100" class="w-full h-32 bg-emerald-50 rounded-2xl p-2 border border-emerald-200"><path d="M 20 85 L 180 85" stroke="#94A3B8" stroke-width="4"/><circle cx="100" cy="30" r="14" fill="#FDE047" stroke="#334155" stroke-width="2"/><path d="M 100 44 L 100 85" stroke="#38BDF8" stroke-width="8" stroke-linecap="round"/><text x="40" y="20" font-size="11" font-weight="bold" fill="#065F46">Duduk Mandiri Tanpa Disangga (60 Detik)</text></svg>`;
+          break;
+        case 'animalGrid':
+          svgContent = `<div class="grid grid-cols-4 gap-2 bg-slate-100 p-3 rounded-2xl border border-slate-300 text-center text-xs font-bold"><div class="bg-white p-2 rounded-xl shadow-sm"><i class="fa-solid fa-cat text-2xl text-amber-500 block mb-1"></i>Kucing</div><div class="bg-white p-2 rounded-xl shadow-sm"><i class="fa-solid fa-dog text-2xl text-amber-700 block mb-1"></i>Anjing</div><div class="bg-white p-2 rounded-xl shadow-sm"><i class="fa-solid fa-horse text-2xl text-orange-600 block mb-1"></i>Kuda</div><div class="bg-white p-2 rounded-xl shadow-sm"><i class="fa-solid fa-mug-hot text-2xl text-blue-500 block mb-1"></i>Cangkir</div></div>`;
+          break;
+        case 'animalActionGrid':
+          svgContent = `<div class="grid grid-cols-5 gap-1.5 bg-slate-100 p-2.5 rounded-2xl border border-slate-300 text-center text-[11px] font-bold"><div class="bg-white p-1.5 rounded-xl"><i class="fa-solid fa-crow text-xl text-sky-500 block"></i>Terbang</div><div class="bg-white p-1.5 rounded-xl"><i class="fa-solid fa-cat text-xl text-amber-500 block"></i>Mengeong</div><div class="bg-white p-1.5 rounded-xl"><i class="fa-solid fa-user text-xl text-purple-500 block"></i>Bicara</div><div class="bg-white p-1.5 rounded-xl"><i class="fa-solid fa-dog text-xl text-amber-800 block"></i>Gonggong</div><div class="bg-white p-1.5 rounded-xl"><i class="fa-solid fa-horse text-xl text-orange-700 block"></i>Meringkik</div></div>`;
+          break;
+        case 'trainCubes':
+          svgContent = `<svg viewBox="0 0 200 80" class="w-full h-24 bg-blue-50 rounded-2xl p-2 border border-blue-200"><rect x="30" y="40" width="25" height="25" rx="3" fill="#3B82F6" stroke="#1D4ED8" stroke-width="2"/><rect x="60" y="40" width="25" height="25" rx="3" fill="#3B82F6" stroke="#1D4ED8" stroke-width="2"/><rect x="90" y="40" width="25" height="25" rx="3" fill="#3B82F6" stroke="#1D4ED8" stroke-width="2"/><rect x="60" y="12" width="25" height="25" rx="3" fill="#EF4444" stroke="#B91C1C" stroke-width="2"/><text x="125" y="40" font-size="10" font-weight="bold" fill="#1E3A8A">Kereta Api + Cerobong</text></svg>`;
+          break;
+        case 'straightLineTest':
+          svgContent = `<div class="flex gap-4 bg-slate-50 p-3 rounded-2xl border border-slate-200 text-xs"><div class="flex-1 text-center bg-emerald-50 p-2 rounded-xl border border-emerald-300"><span class="font-bold text-emerald-800 block mb-1">JAWAB: YA</span><svg viewBox="0 0 60 60" class="w-12 h-12 mx-auto"><line x1="20" y1="10" x2="20" y2="50" stroke="#10B981" stroke-width="4"/><line x1="40" y1="10" x2="40" y2="50" stroke="#10B981" stroke-width="4"/></svg></div><div class="flex-1 text-center bg-rose-50 p-2 rounded-xl border border-rose-300"><span class="font-bold text-rose-800 block mb-1">JAWAB: TIDAK</span><svg viewBox="0 0 60 60" class="w-12 h-12 mx-auto"><path d="M 15 10 Q 30 30 15 50" stroke="#EF4444" stroke-width="4" fill="none"/><path d="M 45 10 Q 30 30 45 50" stroke="#EF4444" stroke-width="4" fill="none"/></svg></div></div>`;
+          break;
+        case 'bridgeCubes':
+          svgContent = `<svg viewBox="0 0 200 80" class="w-full h-24 bg-amber-50 rounded-2xl p-2 border border-amber-200"><rect x="40" y="40" width="25" height="25" rx="3" fill="#F59E0B" stroke="#B45309" stroke-width="2"/><rect x="95" y="40" width="25" height="25" rx="3" fill="#F59E0B" stroke="#B45309" stroke-width="2"/><rect x="50" y="12" width="60" height="25" rx="3" fill="#10B981" stroke="#047857" stroke-width="2"/><text x="130" y="45" font-size="11" font-weight="bold" fill="#78350F">Jembatan 3 Kubus</text></svg>`;
+          break;
+        case 'circleTest':
+          svgContent = `<div class="flex gap-4 bg-slate-50 p-3 rounded-2xl border border-slate-200 text-xs"><div class="flex-1 text-center bg-emerald-50 p-2 rounded-xl border border-emerald-300"><span class="font-bold text-emerald-800 block mb-1">JAWAB: YA</span><svg viewBox="0 0 50 50" class="w-10 h-10 mx-auto"><circle cx="25" cy="25" r="18" stroke="#10B981" stroke-width="3" fill="none"/></svg></div><div class="flex-1 text-center bg-rose-50 p-2 rounded-xl border border-rose-300"><span class="font-bold text-rose-800 block mb-1">JAWAB: TIDAK</span><svg viewBox="0 0 50 50" class="w-10 h-10 mx-auto"><path d="M 10 10 C 40 10 40 40 10 30 Z" stroke="#EF4444" stroke-width="3" fill="none"/></svg></div></div>`;
+          break;
+        case 'lineLengthTest':
+          svgContent = `<div class="bg-purple-50 p-3 rounded-2xl border border-purple-200 text-center"><span class="text-xs font-bold text-purple-900 block mb-2">Tunjukkan & Tanyakan: "Mana garis yang lebih panjang?"</span><svg viewBox="0 0 200 50" class="w-full h-12"><line x1="30" y1="15" x2="170" y2="15" stroke="#8B5CF6" stroke-width="5" stroke-linecap="round"/><line x1="30" y1="35" x2="120" y2="35" stroke="#8B5CF6" stroke-width="5" stroke-linecap="round"/></svg></div>`;
+          break;
+        case 'plusSignTest':
+          svgContent = `<div class="flex gap-4 bg-slate-50 p-3 rounded-2xl border border-slate-200 text-xs"><div class="flex-1 text-center bg-emerald-50 p-2 rounded-xl border border-emerald-300"><span class="font-bold text-emerald-800 block mb-1">JAWAB: YA</span><svg viewBox="0 0 50 50" class="w-10 h-10 mx-auto"><line x1="25" y1="8" x2="25" y2="42" stroke="#10B981" stroke-width="4"/><line x1="8" y1="25" x2="42" y2="25" stroke="#10B981" stroke-width="4"/></svg></div><div class="flex-1 text-center bg-rose-50 p-2 rounded-xl border border-rose-300"><span class="font-bold text-rose-800 block mb-1">JAWAB: TIDAK</span><svg viewBox="0 0 50 50" class="w-10 h-10 mx-auto"><path d="M 10 10 Q 25 40 40 10" stroke="#EF4444" stroke-width="3" fill="none"/></svg></div></div>`;
+          break;
+        case 'squareTest':
+          svgContent = `<div class="flex gap-4 bg-slate-50 p-3 rounded-2xl border border-slate-200 text-xs"><div class="flex-1 text-center bg-emerald-50 p-2 rounded-xl border border-emerald-300"><span class="font-bold text-emerald-800 block mb-1">JAWAB: YA</span><svg viewBox="0 0 50 50" class="w-10 h-10 mx-auto"><rect x="10" y="10" width="30" height="30" stroke="#10B981" stroke-width="3" fill="none"/></svg></div><div class="flex-1 text-center bg-rose-50 p-2 rounded-xl border border-rose-300"><span class="font-bold text-rose-800 block mb-1">JAWAB: TIDAK</span><svg viewBox="0 0 50 50" class="w-10 h-10 mx-auto"><circle cx="25" cy="25" r="15" stroke="#EF4444" stroke-width="3" fill="none"/></svg></div></div>`;
+          break;
+        case 'humanDraw3':
+          svgContent = `<div class="flex gap-4 bg-slate-50 p-3 rounded-2xl border border-slate-200 text-xs"><div class="flex-1 text-center bg-emerald-50 p-2 rounded-xl border border-emerald-300"><span class="font-bold text-emerald-800 block mb-1">JAWAB: YA (≥ 3 Bagian Tubuh)</span><p class="text-[10px] text-emerald-700">Contoh: Kepala, Badan, Kaki</p></div><div class="flex-1 text-center bg-rose-50 p-2 rounded-xl border border-rose-300"><span class="font-bold text-rose-800 block mb-1">JAWAB: TIDAK (&lt; 3 Bagian)</span><p class="text-[10px] text-rose-700">Hanya coretan / 1-2 bagian</p></div></div>`;
+          break;
+        case 'humanDraw6':
+          svgContent = `<div class="flex gap-4 bg-slate-50 p-3 rounded-2xl border border-slate-200 text-xs"><div class="flex-1 text-center bg-emerald-50 p-2 rounded-xl border border-emerald-300"><span class="font-bold text-emerald-800 block mb-1">JAWAB: YA (≥ 6 Bagian Tubuh)</span><p class="text-[10px] text-emerald-700">Kepala, Mata, Mulut, Badan, Lengan, Kaki</p></div><div class="flex-1 text-center bg-rose-50 p-2 rounded-xl border border-rose-300"><span class="font-bold text-rose-800 block mb-1">JAWAB: TIDAK (&lt; 6 Bagian)</span><p class="text-[10px] text-rose-700">Bagian tubuh kurang dari 6</p></div></div>`;
+          break;
+      }
+      return svgContent;
+    }
+
+    // TOGGLE CHECKBOX PREMATUR
+    function togglePrematureInput() {
+      const chk = document.getElementById('isPremature');
+      const container = document.getElementById('premature-weeks-container');
+      if (!container) return;
+      if (chk && chk.checked) {
+        container.classList.remove('hidden');
+      } else {
+        container.classList.add('hidden');
+      }
+      updateAgePreview();
+    }
+
+    // UPDATE PREVIEW USIA OTOMATIS & SEMBUNYIKAN PREMATUR JIKA > 2 TAHUN (≥ 24 BULAN)
+    function updateAgePreview() {
+      const tglLahirEl = document.getElementById('tglLahir');
+      const previewArea = document.getElementById('live-age-preview');
+      const usiaTampilEl = document.getElementById('usiaTampil');
+      const prematureBox = document.getElementById('premature-box');
+      const chkPremature = document.getElementById('isPremature');
+
+      if (!tglLahirEl || !tglLahirEl.value) {
+        if (previewArea) previewArea.classList.add('hidden');
+        if (usiaTampilEl) usiaTampilEl.value = "";
+        return;
+      }
+
+      const tglLahirVal = tglLahirEl.value;
+      const tglPemeriksaanEl = document.getElementById('tglPemeriksaan');
+      const tglPemeriksaanVal = (tglPemeriksaanEl && tglPemeriksaanEl.value) ? tglPemeriksaanEl.value : new Date().toISOString().split('T')[0];
+
+      const birth = new Date(tglLahirVal);
+      const exam = new Date(tglPemeriksaanVal);
+
+      if (exam < birth) {
+        if (previewArea) previewArea.classList.add('hidden');
+        if (usiaTampilEl) usiaTampilEl.value = "Tanggal Lahir melampaui Tanggal Periksa";
+        return;
+      }
+
+      let years = exam.getFullYear() - birth.getFullYear();
+      let months = (exam.getMonth() + 1) - (birth.getMonth() + 1);
+      let days = exam.getDate() - birth.getDate();
+
+      if (days < 0) { days += 30; months -= 1; }
+      if (months < 0) { months += 12; years -= 1; }
+
+      const totalMonths = (years * 12) + months;
+      const kronologisStr = `${years > 0 ? years + ' thn ' : ''}${months} bln ${days} hr`;
+
+      // 1. Tampilkan Usia di Input Text "Usia Anak"
+      if (usiaTampilEl) {
+        usiaTampilEl.value = kronologisStr;
+      }
+
+      // 2. SEMBUNYIKAN PREMATUR BOX JIKA USIA >= 24 BULAN (2 TAHUN)
+      if (totalMonths >= 24) {
+        if (prematureBox) prematureBox.classList.add('hidden');
+        if (chkPremature) chkPremature.checked = false; 
+        const weeksContainer = document.getElementById('premature-weeks-container');
+        if (weeksContainer) weeksContainer.classList.add('hidden');
+      } else {
+        if (prematureBox) prematureBox.classList.remove('hidden');
+      }
+
+      const isPremature = chkPremature ? chkPremature.checked : false;
+
+      const kpspAges = [3, 6, 9, 12, 15, 18, 21, 24, 30, 36, 42, 48, 54, 60, 66, 72];
+      let selectedKpsp = 3;
+      let roundedMonths = days > 15 ? totalMonths + 1 : totalMonths;
+
+      for (let i = 0; i < kpspAges.length; i++) {
+        if (roundedMonths >= kpspAges[i]) { selectedKpsp = kpspAges[i]; }
+      }
+
+      if (previewArea) previewArea.classList.remove('hidden');
+      document.getElementById('preview-kronologis').innerText = kronologisStr;
+      document.getElementById('preview-kpsp-form').innerText = `KPSP ${selectedKpsp} Bulan`;
+      document.getElementById('preview-koreksi').innerText = totalMonths >= 24 ? "Tidak Perlu Koreksi (≥ 2 Tahun)" : (isPremature ? "Prematur (Akan Dikoreksi)" : "Lahir Normal / Tidak Dicentang");
+    }
+
+    // PROSES MENGHITUNG USIA & START KPSP
+    function calculateAgeAndStart(e) {
+      if (e) e.preventDefault();
+
+      const namaAnak = document.getElementById('namaAnak').value.trim();
+      const jenisKelamin = document.getElementById('jenisKelamin').value;
+      const tglLahirVal = document.getElementById('tglLahir').value;
+      const tglPemeriksaanVal = document.getElementById('tglPemeriksaan').value;
+      const namaOrangTua = document.getElementById('namaOrangTua').value.trim();
+      const hubungan = document.getElementById('hubungan').value;
+      
+      const isPrematureEl = document.getElementById('isPremature');
+      const isPremature = isPrematureEl ? isPrematureEl.checked : false;
+      const usiaKehamilanInput = document.getElementById('usiaKehamilan');
+      const usiaKehamilan = usiaKehamilanInput ? (parseInt(usiaKehamilanInput.value) || 34) : 34;
+
+      if (!tglLahirVal || !tglPemeriksaanVal) {
+        alert("Harap lengkapi tanggal lahir dan tanggal pemeriksaan!");
+        return;
+      }
+
+      const birth = new Date(tglLahirVal);
+      const exam = new Date(tglPemeriksaanVal);
+
+      if (exam < birth) {
+        alert("Tanggal pemeriksaan tidak boleh lebih awal dari tanggal lahir anak!");
+        return;
+      }
+
+      let examYear = exam.getFullYear();
+      let examMonth = exam.getMonth() + 1;
+      let examDay = exam.getDate();
+
+      let birthYear = birth.getFullYear();
+      let birthMonth = birth.getMonth() + 1;
+      let birthDay = birth.getDate();
+
+      let days = examDay - birthDay;
+      let months = examMonth - birthMonth;
+      let years = examYear - birthYear;
+
+      if (days < 0) { days += 30; months -= 1; }
+      if (months < 0) { months += 12; years -= 1; }
+
+      const totalChronologicalMonths = (years * 12) + months;
+      const usiaKronologisText = `${years > 0 ? years + ' thn ' : ''}${months} bln ${days} hr`;
+
+      let isKoreksiApplied = false;
+      let correctedYears = years;
+      let correctedMonths = months;
+      let correctedDays = days;
+      let correctedMonthsText = "Tidak Perlu Koreksi (Lahir Normal)";
+
+      if (totalChronologicalMonths < 24 && isPremature && usiaKehamilan < 37) {
+        isKoreksiApplied = true;
+        const deltaWeeks = 40 - usiaKehamilan;
+        const prematureDaysTotal = deltaWeeks * 7;
+
+        let pMonths = Math.floor(prematureDaysTotal / 30);
+        let pDays = prematureDaysTotal % 30;
+
+        correctedDays = days - pDays;
+        correctedMonths = months - pMonths;
+        correctedYears = years;
+
+        if (correctedDays < 0) { correctedDays += 30; correctedMonths -= 1; }
+        if (correctedMonths < 0) { correctedMonths += 12; correctedYears -= 1; }
+
+        correctedMonthsText = `${correctedYears > 0 ? correctedYears + ' thn ' : ''}${correctedMonths} bln ${correctedDays} hr (Koreksi ${deltaWeeks} mgg)`;
+      } else if (totalChronologicalMonths >= 24) {
+        correctedMonthsText = "Tidak Dikoreksi (Anak ≥ 2 Tahun)";
+      }
+
+      let baseMonths = isKoreksiApplied ? ((correctedYears * 12) + correctedMonths) : totalChronologicalMonths;
+      let baseDays = isKoreksiApplied ? correctedDays : days;
+
+      let finalRoundedAgeMonths = baseMonths;
+      let pembulatanNote = "";
+
+      if (baseDays > 15) {
+        finalRoundedAgeMonths += 1;
+        pembulatanNote = `(Sisa ${baseDays} hr > 15 hr: Dibulatkan naik +1 bulan)`;
+      } else {
+        pembulatanNote = `(Sisa ${baseDays} hr ≤ 15 hr: Dibulatkan tetap)`;
+      }
+
+      const usiaDigunakanText = `${finalRoundedAgeMonths} Bulan ${pembulatanNote}`;
+
+      const kpspAges = [3, 6, 9, 12, 15, 18, 21, 24, 30, 36, 42, 48, 54, 60, 66, 72];
+      let selectedKpspAge = 3;
+
+      if (finalRoundedAgeMonths < 3) {
+        selectedKpspAge = 3;
+      } else {
+        for (let i = 0; i < kpspAges.length; i++) {
+          if (finalRoundedAgeMonths >= kpspAges[i]) {
+            selectedKpspAge = kpspAges[i];
+          }
+        }
+      }
+
+      currentChildData = {
+        namaAnak,
+        jenisKelamin,
+        tglLahir: tglLahirVal,
+        tglPemeriksaan: tglPemeriksaanVal,
+        namaOrangTua,
+        hubungan,
+        usiaKronologisStr: usiaKronologisText,
+        usiaKoreksiStr: correctedMonthsText,
+        usiaDigunakanStr: usiaDigunakanText,
+        finalRoundedAgeMonths,
+        selectedKpspAge
+      };
+
+      renderKPSPQuestions(selectedKpspAge);
+    }
+
+    // RENDER SOAL KPSP
+    function renderKPSPQuestions(age) {
+      currentQuestions = kpspDatabase[age] || kpspDatabase[3];
+      currentAnswers = {};
+
+      const ageBadge = document.getElementById('kpsp-age-badge');
+      const childName = document.getElementById('kpsp-child-name');
+      const calcDetails = document.getElementById('kpsp-calc-details');
+      const toolsAgeTitle = document.getElementById('tools-age-title');
+      const toolsList = document.getElementById('kpsp-tools-list');
+
+      if (ageBadge) ageBadge.innerText = `KPSP KELOMPOK USIA ${age} BULAN`;
+      if (childName) childName.innerText = currentChildData.namaAnak;
+      if (calcDetails) {
+        calcDetails.innerHTML = `
+          <p><strong>• Usia Kronologis:</strong> ${currentChildData.usiaKronologisStr}</p>
+          <p><strong>• Usia Koreksi Prematur:</strong> ${currentChildData.usiaKoreksiStr}</p>
+          <p><strong>• Usia Digunakan (Pembulatan SDIDTK):</strong> ${currentChildData.usiaDigunakanStr}</p>
+          <p><strong>• Form KPSP Terpilih:</strong> Kelompok ${currentChildData.selectedKpspAge} Bulan</p>
+        `;
+      }
+
+      if (toolsAgeTitle) toolsAgeTitle.innerText = age;
+      if (toolsList) {
+        toolsList.innerHTML = '';
+        const requiredTools = kpspToolsDatabase[age] || ["Peralatan umum / Tanpa alat khusus"];
+        requiredTools.forEach(toolItem => {
+          const li = document.createElement('li');
+          li.className = "flex items-center space-x-2 bg-white px-3 py-1.5 rounded-xl border border-amber-200 shadow-sm";
+          li.innerHTML = `<i class="fa-solid fa-circle-check text-amber-500 text-xs"></i> <span>${toolItem}</span>`;
+          toolsList.appendChild(li);
+        });
+      }
+
+      const container = document.getElementById('kpsp-questions-list');
+      if (container) {
+        container.innerHTML = '';
+
+        currentQuestions.forEach((q, idx) => {
+          const qCard = document.createElement('div');
+          qCard.className = "bg-white p-6 rounded-3xl border-2 border-slate-200 shadow-sm space-y-4";
+          
+          let imgHtml = q.imageSvg ? renderSvgIllustration(q.imageSvg) : '';
+
+          qCard.innerHTML = `
+            <div class="flex items-start justify-between gap-3">
+              <div class="flex items-center space-x-3">
+                <span class="w-8 h-8 rounded-xl bg-purple-100 text-purple-700 font-bold flex items-center justify-center text-sm font-fun">
+                  ${idx + 1}
+                </span>
+                <span class="text-xs font-bold px-2.5 py-1 rounded-full bg-slate-100 text-slate-600 uppercase tracking-wider">
+                  ${q.sector}
+                </span>
+              </div>
+            </div>
+
+            <p class="text-sm font-semibold text-slate-800 leading-relaxed">${q.text}</p>
+
+            ${imgHtml ? `<div class="pt-2">${imgHtml}</div>` : ''}
+
+            <div class="flex items-center space-x-4 pt-2 border-t border-slate-100">
+              <label class="flex-1 flex items-center justify-center space-x-2 p-3 rounded-2xl border-2 border-emerald-200 bg-emerald-50/50 hover:bg-emerald-100 cursor-pointer transition">
+                <input type="radio" name="q_${q.id}" value="YA" onchange="setAnswer(${q.id}, 'YA')" required class="w-5 h-5 text-emerald-600 focus:ring-emerald-500">
+                <span class="font-bold text-emerald-800 text-sm">YA (Bisa / Pernah)</span>
+              </label>
+              <label class="flex-1 flex items-center justify-center space-x-2 p-3 rounded-2xl border-2 border-rose-200 bg-rose-50/50 hover:bg-rose-100 cursor-pointer transition">
+                <input type="radio" name="q_${q.id}" value="TIDAK" onchange="setAnswer(${q.id}, 'TIDAK')" required class="w-5 h-5 text-rose-600 focus:ring-rose-500">
+                <span class="font-bold text-rose-800 text-sm">TIDAK (Belum Bisa)</span>
+              </label>
+            </div>
+          `;
+          container.appendChild(qCard);
+        });
+      }
+
+      document.getElementById('step-identity').classList.add('hidden');
+      document.getElementById('step-kpsp').classList.remove('hidden');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function setAnswer(qId, val) {
+      currentAnswers[qId] = val;
+    }
+
+    function backToIdentity() {
+      document.getElementById('step-kpsp').classList.add('hidden');
+      document.getElementById('page-result').classList.add('hidden');
+      document.getElementById('step-identity').classList.remove('hidden');
+      showPage('screening-form');
+    }
+
+    function evaluateKPSP() {
+      const answeredCount = Object.keys(currentAnswers).length;
+      if (answeredCount < currentQuestions.length) {
+        alert(`Harap jawab seluruh ${currentQuestions.length} pertanyaan KPSP sebelum melanjutkan!`);
+        return;
+      }
+
+      let totalYa = 0;
+      let noAnswersBySector = {
+        "Gerak kasar": 0,
+        "Gerak halus": 0,
+        "Bicara dan bahasa": 0,
+        "Sosialisasi dan kemandirian": 0
+      };
+
+      currentQuestions.forEach(q => {
+        if (currentAnswers[q.id] === 'YA') {
+          totalYa++;
+        } else {
+          if (noAnswersBySector[q.sector] !== undefined) {
+            noAnswersBySector[q.sector]++;
+          }
+        }
+      });
+
+      let category = "";
+      let categoryColorClass = "";
+      let interventionHtml = "";
+      let exactRekomendasi = "";
+
+      if (totalYa >= 9) {
+        category = "Sesuai (S)";
+        exactRekomendasi = "Lanjutkan Stimulasi Rutin";
+        categoryColorClass = "bg-emerald-100 text-emerald-800 border-emerald-300";
+        interventionHtml = `
+          <div class="bg-emerald-50 p-5 rounded-2xl border-2 border-emerald-200 text-emerald-900 space-y-3">
+            <h4 class="font-bold font-fun text-lg text-emerald-800 flex items-center gap-2">
+              <i class="fa-solid fa-face-smile-beam text-emerald-600"></i> Interpretasi & Tindak Lanjut Sesuai Pedoman SDIDTK Kemenkes RI:
+            </h4>
+            <div class="p-3 bg-emerald-100/80 rounded-xl text-xs font-bold text-emerald-950">
+              🎉 Selamat! Perkembangan anak SESUAI (S) dengan tahap perkembangannya.
+            </div>
+            <ul class="text-xs space-y-2 list-disc list-inside font-medium leading-relaxed">
+              <li><strong>Beri Pujian:</strong> Berikan pujian kepada orang tua atau pengasuh karena telah mengasuh anaknya dengan baik.</li>
+              <li><strong>Teruskan Stimulasi Rutin:</strong> Edukasi orang tua untuk melanjutkan stimulasi perkembangan anak sesuai tahap umurnya.</li>
+              <li><strong>Pemantauan Rutin:</strong> Jadwalkan pemeriksaan/skrining KPSP rutin setiap 3 bulan untuk usia &lt; 24 bulan dan setiap 6 bulan untuk usia 24 – 72 bulan.</li>
+            </ul>
+          </div>`;
+      } else if (totalYa >= 7) {
+        category = "Meragukan (M)";
+        exactRekomendasi = "Perlu Stimulasi Intensif di Rumah";
+        categoryColorClass = "bg-amber-100 text-amber-800 border-amber-300";
+        interventionHtml = `
+          <div class="bg-amber-50 p-5 rounded-2xl border-2 border-amber-200 text-amber-900 space-y-3">
+            <h4 class="font-bold font-fun text-lg text-amber-800 flex items-center gap-2">
+              <i class="fa-solid fa-hand-holding-heart text-amber-600"></i> Interpretasi & Tindak Lanjut Sesuai Pedoman SDIDTK Kemenkes RI:
+            </h4>
+            <div class="p-3 bg-amber-100/80 rounded-xl text-xs font-bold text-amber-950">
+              💡 Perkembangan anak MERAGUKAN (M). Perlu latihan intensif di rumah.
+            </div>
+            <ul class="text-xs space-y-2 list-disc list-inside font-medium leading-relaxed">
+              <li><strong>Stimulasi Intensif 2 Minggu:</strong> Petunjuk kepada orang tua untuk melakukan stimulasi perkembangan pada anak setiap saat dan sesering mungkin pada aspek yang tertinggal.</li>
+              <li><strong>Pemeriksaan Kesehatan:</strong> Lakukan pemeriksaan kesehatan fisik untuk mencari kemungkinan adanya penyakit yang mempengaruhi perkembangan.</li>
+              <li><strong>Evaluasi Ulang 2 Minggu:</strong> Lakukan evaluasi ulang KPSP setelah 2 minggu intervensi intensif di rumah. Jika hasil tetap meragukan (7-8) atau ada penyimpangan (≤6), segera rujuk ke RS Rujukan Tumbuh Kembang Level 1.</li>
+            </ul>
+          </div>`;
+      } else {
+        category = "Penyimpangan (P)";
+        exactRekomendasi = "Segera Rujuk ke Faskes Tumbuh Kembang Level 1";
+        categoryColorClass = "bg-rose-100 text-rose-800 border-rose-300";
+        interventionHtml = `
+          <div class="bg-rose-50 p-5 rounded-2xl border-2 border-rose-200 text-rose-900 space-y-3">
+            <h4 class="font-bold font-fun text-lg text-rose-800 flex items-center gap-2">
+              <i class="fa-solid fa-heart-pulse text-rose-600"></i> Interpretasi & Tindak Lanjut Sesuai Pedoman SDIDTK Kemenkes RI:
+            </h4>
+            <div class="p-3 bg-rose-100/80 rounded-xl text-xs font-bold text-rose-950">
+              🚨 Ada KEMUNGKINAN PENYIMPANGAN (P) perkembangan anak.
+            </div>
+            <ul class="text-xs space-y-2 list-disc list-inside font-medium leading-relaxed">
+              <li><strong>Segera Rujuk ke Faskes Tumbuh Kembang Level 1:</strong> Segera rujuk anak ke Faskes Rujukan Tumbuh Kembang Level 1 dengan merinci jenis dan jumlah penyimpangan perkembangan.</li>
+              <li><strong>Bawa Laporan Ini:</strong> Cetak/tunjukkan hasil skrining ini sebagai rujukan data perkembangan awal bagi dokter spesialis.</li>
+            </ul>
+          </div>`;
+      }
+
+      currentChildData.exactRekomendasi = exactRekomendasi;
+
+      let stimulasiCardsHtml = "";
+      let hasNoAnswer = false;
+
+      for (const sector in noAnswersBySector) {
+        const count = noAnswersBySector[sector];
+        if (count > 0) {
+          hasNoAnswer = true;
+          const tips = stimulationTipsBySector[sector] || [
+            "Lakukan intervensi dini dan latihan intensif pada aspek ini."
+          ];
+
+          let tipsListHtml = tips.map(t => `<li class="text-xs text-slate-700 leading-relaxed">• ${t}</li>`).join('');
+
+          stimulasiCardsHtml += `
+            <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm space-y-2">
+              <div class="flex items-center justify-between border-b border-slate-100 pb-2">
+                <span class="font-bold text-purple-900 text-xs font-fun uppercase tracking-wider">${sector}</span>
+                <span class="px-2.5 py-0.5 rounded-full bg-rose-100 text-rose-800 font-bold text-[11px]">${count} Jawaban Tidak</span>
+              </div>
+              <ul class="space-y-1.5 pt-1">
+                ${tipsListHtml}
+              </ul>
+            </div>`;
+        }
+      }
+
+      let finalStimulasiBoxHtml = "";
+      if (hasNoAnswer) {
+        finalStimulasiBoxHtml = `
+          <div class="space-y-3 pt-2">
+            <h4 class="font-bold font-fun text-sm text-slate-800 flex items-center gap-2">
+              <i class="fa-solid fa-lightbulb text-amber-500"></i> Panduan Intervensi Dini Perkembangan (Aspek Jawaban TIDAK):
+            </h4>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+              ${stimulasiCardsHtml}
+            </div>
+          </div>`;
+      } else {
+        finalStimulasiBoxHtml = `
+          <div class="p-4 rounded-2xl bg-emerald-50 border border-emerald-200 text-emerald-900 text-xs font-semibold">
+            ✨ Seluruh 10 pertanyaan KPSP dijawab "YA". Perkembangan anak tumbuh sangat optimal!
+          </div>`;
+      }
+
+      document.getElementById('res-tgl-pemeriksaan').innerText = currentChildData.tglPemeriksaan;
+      document.getElementById('res-id').innerText = `KPSP-${Date.now().toString().slice(-6)}`;
+      document.getElementById('res-nama-anak').innerText = currentChildData.namaAnak;
+      document.getElementById('res-jk').innerText = currentChildData.jenisKelamin;
+      document.getElementById('res-tgl-lahir').innerText = currentChildData.tglLahir;
+      document.getElementById('res-orang-tua').innerText = `${currentChildData.namaOrangTua} (${currentChildData.hubungan})`;
+      document.getElementById('res-usia-kronologis').innerText = currentChildData.usiaKronologisStr;
+      document.getElementById('res-usia-koreksi').innerText = currentChildData.usiaKoreksiStr;
+      document.getElementById('res-usia-digunakan').innerText = currentChildData.usiaDigunakanStr;
+      document.getElementById('res-kelompok-kpsp').innerText = `${currentChildData.selectedKpspAge} Bulan`;
+
+      const scoreCard = document.getElementById('res-score-card');
+      scoreCard.className = `p-5 rounded-2xl border-2 flex flex-col justify-center items-center text-center space-y-2 ${categoryColorClass}`;
+      document.getElementById('res-total-skor').innerText = `${totalYa} / 10`;
+      document.getElementById('res-kategori').innerText = category;
+
+      document.getElementById('res-intervention-box').innerHTML = interventionHtml;
+      document.getElementById('res-stimulasi-box').innerHTML = finalStimulasiBoxHtml;
+
+      const breakdown = document.getElementById('res-questions-breakdown');
+      breakdown.innerHTML = '';
+      currentQuestions.forEach((q, idx) => {
+        const ans = currentAnswers[q.id];
+        const isYa = ans === 'YA';
+        const row = document.createElement('div');
+        row.className = "flex items-center justify-between p-3 rounded-xl border text-xs bg-slate-50";
+        row.innerHTML = `
+          <div class="pr-2">
+            <span class="font-bold text-slate-700 mr-2">${idx + 1}. [${q.sector}]</span>
+            <span class="text-slate-600">${q.text.substring(0, 95)}...</span>
+          </div>
+          <span class="px-3 py-1 rounded-full font-bold text-[11px] ${isYa ? 'bg-emerald-100 text-emerald-800' : 'bg-rose-100 text-rose-800'}">
+            ${ans}
+          </span>
+        `;
+        breakdown.appendChild(row);
+      });
+
+      saveToHistoryRecord({
+        id: document.getElementById('res-id').innerText,
+        namaAnak: currentChildData.namaAnak,
+        tgl: currentChildData.tglPemeriksaan,
+        kpspAge: currentChildData.selectedKpspAge,
+        skor: totalYa,
+        kategori: category
+      });
+
+      showPage('result');
+    }
+
+    function saveToHistoryRecord(record) {
+      let history = JSON.parse(localStorage.getItem('pelita_history') || '[]');
+      history.unshift(record);
+      localStorage.setItem('pelita_history', JSON.stringify(history));
+    }
+
+    function renderHistoryList() {
+      const container = document.getElementById('history-list');
+      let history = JSON.parse(localStorage.getItem('pelita_history') || '[]');
+
+      if (history.length === 0) {
+        container.innerHTML = `<div class="text-center py-8 text-slate-400 text-sm">Belum ada riwayat skrining tersimpan.</div>`;
+        return;
+      }
+
+      container.innerHTML = '';
+      history.forEach(item => {
+        const card = document.createElement('div');
+        card.className = "p-4 rounded-2xl border border-slate-200 bg-slate-50 flex items-center justify-between";
+        card.innerHTML = `
+          <div>
+            <span class="text-[11px] font-mono text-purple-600 font-bold">${item.id}</span>
+            <h4 class="font-bold text-slate-800 font-fun uppercase">${item.namaAnak}</h4>
+            <p class="text-xs text-slate-500">Tgl Skrining: ${item.tgl} | Form KPSP ${item.kpspAge} Bulan</p>
+          </div>
+          <div class="text-right">
+            <span class="text-sm font-black font-fun px-3 py-1 rounded-full ${item.skor >= 9 ? 'bg-emerald-100 text-emerald-800' : item.skor >= 7 ? 'bg-amber-100 text-amber-800' : 'bg-rose-100 text-rose-800'}">
+              Skor ${item.skor}/10
+            </span>
+            <p class="text-xs font-bold text-slate-600 mt-1">${item.kategori}</p>
+          </div>
+        `;
+        container.appendChild(card);
+      });
+    }
+
+    function clearLocalHistory() {
+      if (confirm("Apakah Anda yakin ingin menghapus seluruh riwayat skrining lokal?")) {
+        localStorage.removeItem('pelita_history');
+        renderHistoryList();
+      }
+    }
+
+    // FUNGSI HANDLER CETAK / SIMPAN PDF
+    function printReport() {
+      const printableContent = document.getElementById('printable-area');
+      if (!printableContent) {
+        alert("Area hasil skrining tidak ditemukan!");
+        return;
+      }
+
+      const printWin = window.open('', '_blank', 'width=900,height=800');
+      if (!printWin) {
+        alert("Pop-up diblokir oleh browser. Harap izinkan (allow) pop-up di browser Anda agar dapat mencetak PDF.");
+        return;
+      }
+
+      printWin.document.write(`
+        <!DOCTYPE html>
+        <html lang="id">
+        <head>
+          <meta charset="UTF-8">
+          <title>Cetak Hasil Skrining KPSP - PELITA</title>
+          <script src="https://cdn.tailwindcss.com"><\/script>
+          <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+          <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+          <style>
+            body { font-family: 'Inter', sans-serif; background: #ffffff; padding: 20px; color: #1e293b; }
+            h1, h2, h3, h4 { font-family: 'Quicksand', sans-serif; }
+            @media print {
+              .no-print { display: none !important; }
+              body { padding: 0; }
+            }
+          </style>
+        </head>
+        <body class="bg-white">
+          <div class="max-w-4xl mx-auto">
+            ${printableContent.innerHTML}
+          </div>
+          <script>
+            window.onload = function() {
+              setTimeout(function() {
+                window.focus();
+                window.print();
+              }, 600);
+            };
+          <\/script>
+        </body>
+        </html>
+      `);
+      printWin.document.close();
+    }
+
+    // FUNGSI INTEGRASI DENGAN APPS SCRIPT / SPREADSHEET
+    function sendToGoogleSheets() {
+      const btn = document.getElementById('btn-save-cloud');
+      const originalText = btn.innerHTML;
+      btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> Menyimpan...`;
+      btn.disabled = true;
+
+      const chkPremature = document.getElementById('isPremature');
+      const inputMinggu = document.getElementById('usiaKehamilan');
+      const totalSkorText = document.getElementById('res-total-skor').innerText;
+      const totalSkor = parseInt(totalSkorText.split('/')[0]) || 0;
+
+      const payload = {
+        idSkrining: document.getElementById('res-id').innerText,
+        tglSkrining: currentChildData.tglPemeriksaan,
+        namaOrangtua: currentChildData.namaOrangTua,
+        hubungan: currentChildData.hubungan,
+        namaAnak: currentChildData.namaAnak,
+        jenisKelamin: currentChildData.jenisKelamin,
+        tglLahir: currentChildData.tglLahir,
+        isPrematur: chkPremature ? chkPremature.checked : false,
+        mingguPrematur: inputMinggu ? inputMinggu.value : "37",
+        usia: currentChildData.usiaKronologisStr,
+        usiaKronologisOnly: currentChildData.usiaKronologisStr,
+        formKpsp: `${currentChildData.selectedKpspAge} Bulan`,
+        skorYa: totalSkor,
+        skorTidak: 10 - totalSkor,
+        interpretasi: document.getElementById('res-kategori').innerText,
+        rekomendasi: currentChildData.exactRekomendasi || "Lanjutkan Stimulasi Rutin"
+      };
+
+      // Jalankan via API Bawaan Apps Script jika berada di dalam iFrame Google
+      if (typeof google !== 'undefined' && google.script && google.script.run) {
+        google.script.run
+          .withSuccessHandler(function(res) {
+            alert("Data skrining berhasil disimpan ke Google Spreadsheet!");
+            btn.innerHTML = originalText;
+            btn.disabled = false;
+          })
+          .withFailureHandler(function(err) {
+            alert("Gagal menyimpan ke Spreadsheet: " + err);
+            btn.innerHTML = originalText;
+            btn.disabled = false;
+          })
+          .saveScreeningResult(payload);
+      } else {
+        // Fallback fetch Web App publik jika dibuka di luar Apps Script
+        const webAppUrl = "https://script.google.com/macros/s/AKfycbyFKleBZgRZqqdCYumWW1xOWNtI2mPoc9PK3UIqE9fWp_cHd9B9nnEfRMTCjil6xsyJ/exec";
+        fetch(webAppUrl, {
+          method: "POST",
+          mode: "no-cors",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload)
+        }).then(() => {
+          alert("Data skrining berhasil terkirim ke Google Spreadsheet!");
+          btn.innerHTML = originalText;
+          btn.disabled = false;
+        }).catch(err => {
+          alert("Gagal mengirim data: " + err);
+          btn.innerHTML = originalText;
+          btn.disabled = false;
+        });
+      }
+    }
+
+    // SET OTOMATIS TANGGAL PEMERIKSAAN SAAT WEB DIAKSES
+    document.addEventListener("DOMContentLoaded", function() {
+      const today = new Date().toISOString().split('T')[0];
+      const tglPemeriksaanEl = document.getElementById('tglPemeriksaan');
+      if (tglPemeriksaanEl) {
+        tglPemeriksaanEl.value = today;
+      }
+    });
+  </script>
+</body>
+</html>
